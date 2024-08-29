@@ -30,6 +30,30 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
+        for (int i = 0; i < storage.length; i++) {
+            if (Objects.isNull(storage[i])) {
+                break;
+            } else if (uuid.equals(storage[i].uuid) && i == storage.length - 1) {
+                storage[i] = null;
+                break;
+            } else if (uuid.equals(storage[i].uuid)
+                    && i < storage.length - 1
+                    && Objects.isNull(storage[i + 1])) {
+                storage[i] = null;
+                break;
+            } else if (uuid.equals(storage[i].uuid)
+                    && i < storage.length - 1
+                    && !Objects.isNull(storage[i + 1])) {
+                while (!Objects.isNull(storage[i])) {
+                    if (i == storage.length - 1) {
+                        storage[i] = null;
+                        return;
+                    }
+                    storage[i] = storage[++i];
+                }
+                break;
+            }
+        }
     }
 
     /**
