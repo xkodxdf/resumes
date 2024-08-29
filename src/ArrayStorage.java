@@ -19,6 +19,13 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
+        for (Resume resume : storage) {
+            if (Objects.isNull(resume)) {
+                break;
+            } else if (uuid.equals(resume.uuid)) {
+                return resume;
+            }
+        }
         return null;
     }
 
