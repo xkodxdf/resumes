@@ -1,10 +1,11 @@
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[4];
+    Resume[] storage = new Resume[10000];
 
     void clear() {
         for (int i = 0; i < storage.length; i++) {
@@ -67,7 +68,15 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return new Resume[0];
+        int length = 0;
+        for (Resume resume : storage) {
+            if (!Objects.isNull(resume)) {
+                length++;
+            } else {
+                break;
+            }
+        }
+        return Arrays.copyOf(storage, length);
     }
 
     int size() {
