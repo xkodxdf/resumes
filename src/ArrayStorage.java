@@ -7,6 +7,13 @@ public class ArrayStorage {
     Resume[] storage = new Resume[4];
 
     void clear() {
+        for (int i = 0; i < storage.length; i++) {
+            if (!Objects.isNull(storage[i])) {
+                storage[i] = null;
+            } else {
+                break;
+            }
+        }
     }
 
     void save(Resume r) {
