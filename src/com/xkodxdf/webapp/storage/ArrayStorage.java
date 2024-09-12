@@ -10,7 +10,8 @@ import java.util.Objects;
  */
 public class ArrayStorage {
     private int resumesQuantity = 0;
-    Resume[] storage = new Resume[10000];
+    private final int STORAGE_LIMIT = 10_000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
 
     public void clear() {
         Arrays.fill(storage, 0, resumesQuantity, null);
@@ -19,7 +20,7 @@ public class ArrayStorage {
 
     public void save(Resume r) {
         if (!Objects.isNull(r) && !Objects.isNull(r.getUuid())) {
-            if (getPosition(r.getUuid()) != -1) {
+            if (getIndex(r.getUuid()) != -1) {
                 System.out.println("Резюме с идентификатором [" + r.getUuid() + "] уже присутствует в хранилище.");
             } else if (resumesQuantity == storage.length) {
                 System.out.println("Хранилище переполнено");
@@ -31,7 +32,7 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int resumePosition = getPosition(uuid);
+        int resumePosition = getIndex(uuid);
         if (resumePosition != -1) {
             return storage[resumePosition];
         }
@@ -41,15 +42,17 @@ public class ArrayStorage {
 
     public void update(Resume r) {
         if (!Objects.isNull(r) && !Objects.isNull(r.getUuid())) {
-            int resumePosition = getPosition(r.getUuid());
-            if (r.getUuid().equals(storage[resumePosition].getUuid())) {
+            int resumePosition = getIndex(r.getUuid());
+            if (resumePosition == -1) {
+                System.out.println("Резюме c идентификатором [" + r.getUuid() + "] не найдено.");
+            } else {
                 storage[resumePosition] = r;
             }
         }
     }
 
     public void delete(String uuid) {
-        int resumePosition = getPosition(uuid);
+        int resumePosition = getIndex(uuid);
         if (resumePosition != -1) {
             storage[resumePosition] = storage[resumesQuantity - 1];
             storage[resumesQuantity - 1] = null;
@@ -59,7 +62,7 @@ public class ArrayStorage {
         }
     }
 
-    int getPosition(String uuid) {
+    protected int getIndex(String uuid) {
         if (!Objects.isNull(uuid)) {
             for (int i = 0; i < resumesQuantity; i++) {
                 if (storage[i].getUuid().equals(uuid)) {
