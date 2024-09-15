@@ -16,18 +16,12 @@ public class MainTestArrayStorage {
         r2.setUuid("uuid2");
         Resume r3 = new Resume();
         r3.setUuid("uuid3");
-        Resume r4 = new Resume();
-        r4.setUuid("uuid3");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
 
-        System.out.println("uuid3 hash:\n" + ARRAY_STORAGE.get("uuid3").hashCode());
-        ARRAY_STORAGE.update(r4);
-        System.out.println("uuid3 updated hash:\n" + ARRAY_STORAGE.get("uuid3").hashCode());
-
-        System.out.println("\nGet r1: " + ARRAY_STORAGE.get(r1.getUuid()));
+        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
