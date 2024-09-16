@@ -1,7 +1,7 @@
 package com.xkodxdf.webapp;
 
 import com.xkodxdf.webapp.model.Resume;
-import com.xkodxdf.webapp.storage.ArrayStorage;
+import com.xkodxdf.webapp.storage.SortedArrayStorage;
 import com.xkodxdf.webapp.storage.Storage;
 
 import java.io.BufferedReader;
@@ -13,9 +13,10 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static Storage ARRAY_STORAGE = new ArrayStorage();
+    private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) throws IOException {
+        System.out.println(ARRAY_STORAGE.getClass().getName());
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
         while (true) {
