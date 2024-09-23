@@ -15,16 +15,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void saveResume(Resume r, int index) {
-        for (int i = size; i > index; i--) {
-            storage[i] = storage[i - 1];
-        }
+        System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = r;
     }
 
     @Override
     protected void deleteResume(int index) {
-        for (int i = index; i < size - 1; i++) {
-            storage[i] = storage[i + 1];
-        }
+        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
     }
 }
