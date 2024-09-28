@@ -8,8 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Field;
-
 import static org.junit.Assert.*;
 
 
@@ -45,29 +43,22 @@ public abstract class AbstractArrayStorageTest {
 
 
     @Test
-    public void testSize() throws Exception {
+    public void size() throws Exception {
         int currentSize = 3;
-        assertEquals(currentSize, storage.size());
+        assertSize(currentSize);
     }
 
     @Test
-    public void testClearSizeReset() throws Exception {
+    public void clear() throws Exception {
         int sizeAfterClear = 0;
-        assertNotEquals(sizeAfterClear, storage.size());
+        Resume[] arrAfterClear = new Resume[0];
         storage.clear();
-        assertEquals(sizeAfterClear, storage.size());
+        assertSize(sizeAfterClear);
+        assertArrayEquals(arrAfterClear, storage.getAll());
     }
 
     @Test
-    public void testClearStorageContentReset() throws NoSuchFieldException, IllegalAccessException {
-        Resume[] storageArr = getStorageArray();
-        assertFalse(isArrContainsOnlyNull(storageArr));
-        storage.clear();
-        assertTrue(isArrContainsOnlyNull(storageArr));
-    }
-
-    @Test
-    public void testUpdateExistingResume() throws Exception {
+    public void updateExistingResume() throws Exception {
         Resume newResume = new Resume(UUID_1);
         assertNotSame(newResume, storage.get(UUID_1));
         storage.update(newResume);
@@ -75,35 +66,35 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void testUpdateNotExistingResume() {
+    public void updateNotExistingResume() {
         storage.update(notExistingResume);
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void getAll() throws Exception {
         Resume[] expected = {resume1, resume2, resume3};
         Resume[] actual = storage.getAll();
         assertArrayEquals(expected, actual);
     }
 
     @Test(expected = ExistStorageException.class)
-    public void testSaveExistingResume() {
+    public void saveExistingResume() {
         storage.save(resume1);
     }
 
     @Test
-    public void testSaveNotExistingResume() throws Exception {
+    public void saveNotExistingResume() throws Exception {
         int sizeBeforeSave = storage.size();
-        int sizeAfterSave = sizeBeforeSave + 1;
         storage.save(notExistingResume);
-        assertEquals(notExistingResume, storage.get(NOT_EXISTING_RESUME));
-        assertEquals(sizeAfterSave, storage.size());
+        assertGet(notExistingResume);
+        assertSize(sizeBeforeSave + 1);
     }
 
     @Test(expected = StorageException.class)
-    public void testSaveToFullFilledStorage() {
+    public void saveStorageOverflow() {
+        storage.clear();
         try {
-            while (storage.size() < AbstractArrayStorage.STORAGE_LIMIT) {
+            for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
@@ -116,44 +107,34 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void deleteExistingResume() throws Exception {
         int storageSizeBeforeDeleting = storage.size();
-        int storageSizeAfterDeleting = storageSizeBeforeDeleting - 1;
-
         storage.delete(UUID_1);
-        assertEquals(storageSizeAfterDeleting, storage.size());
+        assertSize(storageSizeBeforeDeleting - 1);
         storage.get(UUID_1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void testDeleteNotExistingResume() {
+    public void deleteNotExistingResume() {
         storage.delete(NOT_EXISTING_RESUME);
     }
 
     @Test
     public void getExistingResume() throws Exception {
-        Resume testResume = storage.get(UUID_1);
-        assertEquals(resume1, testResume);
+        assertGet(resume1);
+        assertGet(resume2);
+        assertGet(resume3);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void testGetNotExistingResume() {
+    public void getNotExistingResume() {
         storage.get(NOT_EXISTING_RESUME);
     }
 
 
-    protected Resume[] getStorageArray() throws NoSuchFieldException, IllegalAccessException {
-        Class<?> storageSuperClass = storage.getClass().getSuperclass();
-        Field storageField = storageSuperClass.getDeclaredField("storage");
-        storageField.setAccessible(true);
-        return (Resume[]) storageField.get(storage);
+    private void assertSize(int size) {
+        assertEquals(size, storage.size());
     }
 
-    private boolean isArrContainsOnlyNull(Resume[] arr) {
-        for (Resume r : arr) {
-            if (r != null) {
-                return false;
-            }
-        }
-
-        return true;
+    private void assertGet(Resume r) {
+        assertEquals(r, storage.get(r.getUuid()));
     }
 }
