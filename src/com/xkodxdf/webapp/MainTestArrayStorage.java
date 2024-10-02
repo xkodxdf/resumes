@@ -1,7 +1,7 @@
 package com.xkodxdf.webapp;
 
 import com.xkodxdf.webapp.model.Resume;
-import com.xkodxdf.webapp.storage.ArrayStorage;
+import com.xkodxdf.webapp.storage.array_storage.ArrayStorage;
 
 
 public class MainTestArrayStorage {
