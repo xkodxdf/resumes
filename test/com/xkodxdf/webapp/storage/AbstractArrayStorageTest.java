@@ -1,8 +1,7 @@
-package com.xkodxdf.webapp.storage.abstract_storage;
+package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
-import com.xkodxdf.webapp.storage.Storage;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

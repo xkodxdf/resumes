@@ -1,6 +1,4 @@
-package com.xkodxdf.webapp.storage.dynamic_storage;
-
-import com.xkodxdf.webapp.storage.abstract_storage.AbstractStorageTest;
+package com.xkodxdf.webapp.storage;
 
 public class ListStorageTest extends AbstractStorageTest {
 

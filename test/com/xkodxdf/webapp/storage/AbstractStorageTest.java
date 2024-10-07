@@ -1,9 +1,8 @@
-package com.xkodxdf.webapp.storage.abstract_storage;
+package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.Resume;
-import com.xkodxdf.webapp.storage.Storage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,13 +56,29 @@ public abstract class AbstractStorageTest {
         assertSize(currentSize);
     }
 
+    @Test(expected = ExistStorageException.class)
+    public void saveExistingResume() {
+        storage.save(resume1);
+    }
+
     @Test
-    public void clear() {
-        int sizeAfterClear = 0;
-        Resume[] arrAfterClear = new Resume[0];
-        storage.clear();
-        assertSize(sizeAfterClear);
-        assertArrayEquals(arrAfterClear, storage.getAll());
+    public void saveNotExistingResume() {
+        int sizeBeforeSave = storage.size();
+        storage.save(notExistingResume);
+        assertGet(notExistingResume);
+        assertSize(sizeBeforeSave + 1);
+    }
+
+    @Test
+    public void getExistingResume() {
+        assertGet(resume1);
+        assertGet(resume2);
+        assertGet(resume3);
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void getNotExistingResume() {
+        storage.get(NOT_EXISTING_RESUME);
     }
 
     @Test
@@ -77,25 +92,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void updateNotExistingResume() {
         storage.update(notExistingResume);
-    }
-
-    @Test
-    public void getAll() {
-        Resume[] expected = {resume1, resume2, resume3};
-        assertArrayEquals(expected, storage.getAll());
-    }
-
-    @Test(expected = ExistStorageException.class)
-    public void saveExistingResume() {
-        storage.save(resume1);
-    }
-
-    @Test
-    public void saveNotExistingResume() {
-        int sizeBeforeSave = storage.size();
-        storage.save(notExistingResume);
-        assertGet(notExistingResume);
-        assertSize(sizeBeforeSave + 1);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -116,15 +112,18 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getExistingResume() {
-        assertGet(resume1);
-        assertGet(resume2);
-        assertGet(resume3);
+    public void getAll() {
+        Resume[] expected = {resume1, resume2, resume3};
+        assertArrayEquals(expected, storage.getAll());
     }
 
-    @Test(expected = NotExistStorageException.class)
-    public void getNotExistingResume() {
-        storage.get(NOT_EXISTING_RESUME);
+    @Test
+    public void clear() {
+        int sizeAfterClear = 0;
+        Resume[] arrAfterClear = new Resume[0];
+        storage.clear();
+        assertSize(sizeAfterClear);
+        assertArrayEquals(arrAfterClear, storage.getAll());
     }
 
 
