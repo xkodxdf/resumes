@@ -27,8 +27,8 @@ public class ListStorage extends AbstractStorage {
 
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (Integer) searchKey >= 0;
+    protected boolean isExist(Object index) {
+        return (Integer) index >= 0;
     }
 
     @Override
@@ -42,22 +42,22 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
+    protected void doSave(Resume r, Object index) {
         storage.add(r);
     }
 
     @Override
-    protected Resume doGet(Object searchKey) {
-        return storage.get((Integer) searchKey);
+    protected Resume doGet(Object index) {
+        return storage.get((Integer) index);
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        storage.set((Integer) searchKey, r);
+    protected void doUpdate(Resume r, Object index) {
+        storage.set((Integer) index, r);
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        storage.remove(((Integer) searchKey).intValue());
+    protected void doDelete(Object index) {
+        storage.remove(((Integer) index).intValue());
     }
 }
