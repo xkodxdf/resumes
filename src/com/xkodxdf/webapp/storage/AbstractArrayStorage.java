@@ -4,6 +4,7 @@ import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
@@ -19,11 +20,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     public int size() {
         return size;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
     }
 
     @Override
@@ -62,6 +58,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         fillDeletedElement((Integer) index);
         storage[size - 1] = null;
         size--;
+    }
+
+    @Override
+    protected List<Resume> doCopy() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
 

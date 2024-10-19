@@ -2,7 +2,9 @@ package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
@@ -12,11 +14,6 @@ public class MapStorage extends AbstractStorage {
     @Override
     public int size() {
         return storage.size();
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
@@ -53,5 +50,10 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected void doDelete(Object searchKey) {
         storage.remove((String) searchKey);
+    }
+
+    @Override
+    protected List<Resume> doCopy() {
+        return new ArrayList<>(storage.values());
     }
 }

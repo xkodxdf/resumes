@@ -3,7 +3,7 @@ package com.xkodxdf.webapp.model;
 import java.util.UUID;
 
 
-public class Resume {
+public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private final String fullName;
@@ -27,6 +27,11 @@ public class Resume {
         return fullName;
     }
 
+
+    @Override
+    public int compareTo(Resume o) {
+        return uuid.compareTo(o.uuid);
+    }
 
     @Override
     public boolean equals(Object index) {

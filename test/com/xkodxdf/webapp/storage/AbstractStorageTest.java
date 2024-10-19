@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -130,7 +129,7 @@ public abstract class AbstractStorageTest {
         Resume[] arrAfterClear = new Resume[0];
         storage.clear();
         assertSize(sizeAfterClear);
-        assertArrayEquals(arrAfterClear, storage.getAll());
+        assertArrayEquals(arrAfterClear, storage.getAllSorted().toArray(new Resume[0]));
     }
 
 
@@ -143,7 +142,7 @@ public abstract class AbstractStorageTest {
     }
 
     private void assertContains(Resume[] resumes) {
-        List<Resume> resumesList = Arrays.asList(storage.getAll());
+        List<Resume> resumesList = storage.getAllSorted();
         for (Resume r : resumes) {
             assertTrue(resumesList.contains(r));
         }

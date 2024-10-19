@@ -2,6 +2,8 @@ package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.model.Resume;
 
+import java.util.List;
+
 public interface Storage {
 
     int size();
@@ -14,7 +16,7 @@ public interface Storage {
 
     void delete(String uuid);
 
-    Resume[] getAll();
+    List<Resume> getAllSorted();
 
     void clear();
 }
