@@ -14,7 +14,7 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public final Resume get(String uuid) {
-        Object searchKey = getExistingSearchKey(new Resume(uuid));
+        Object searchKey = getExistingSearchKey(new Resume(uuid, "dummy"));
         return doGet(searchKey);
     }
 
@@ -26,7 +26,7 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        Object searchKey = getExistingSearchKey(new Resume(uuid));
+        Object searchKey = getExistingSearchKey(new Resume(uuid, "dummy"));
         doDelete(searchKey);
     }
 

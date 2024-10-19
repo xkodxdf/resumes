@@ -18,9 +18,13 @@ public abstract class AbstractStorageTest {
     protected final Storage storage;
 
     protected static final String UUID_1 = "uuid1";
+    protected static final String NAME_1 = "dummy1";
     protected static final String UUID_2 = "uuid2";
+    protected static final String NAME_2 = "dummy2";
     protected static final String UUID_3 = "uuid3";
+    protected static final String NAME_3 = "dummy3";
     protected static final String NOT_EXISTING_RESUME = "abracadabra";
+    protected static final String NAME_4 = "dummycadabra";
     protected static final Resume resume1;
     protected static final Resume resume2;
     protected static final Resume resume3;
@@ -28,10 +32,10 @@ public abstract class AbstractStorageTest {
 
 
     static {
-        resume1 = new Resume(UUID_1);
-        resume2 = new Resume(UUID_2);
-        resume3 = new Resume(UUID_3);
-        notExistingResume = new Resume(NOT_EXISTING_RESUME);
+        resume1 = new Resume(UUID_1, NAME_1);
+        resume2 = new Resume(UUID_2, NAME_2);
+        resume3 = new Resume(UUID_3, NAME_3);
+        notExistingResume = new Resume(NOT_EXISTING_RESUME, NAME_4);
     }
 
 
@@ -86,7 +90,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateExistingResume() {
-        Resume newResume = new Resume(UUID_1);
+        Resume newResume = new Resume(UUID_1, NAME_1);
         assertNotSame(newResume, storage.get(UUID_1));
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_1));
