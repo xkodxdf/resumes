@@ -140,11 +140,4 @@ public abstract class AbstractStorageTest {
     private void assertGet(Resume r) {
         assertEquals(r, storage.get(r.getUuid()));
     }
-
-    private void assertContains(Resume[] resumes) {
-        List<Resume> resumesList = storage.getAllSorted();
-        for (Resume r : resumes) {
-            assertTrue(resumesList.contains(r));
-        }
-    }
 }
