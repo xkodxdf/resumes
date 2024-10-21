@@ -1,11 +1,12 @@
 package com.xkodxdf.webapp;
 
 import com.xkodxdf.webapp.model.Resume;
+import com.xkodxdf.webapp.storage.AbstractStorage;
 import com.xkodxdf.webapp.storage.ArrayStorage;
 
 
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    static final AbstractStorage<Integer> ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1", "dummy1");
