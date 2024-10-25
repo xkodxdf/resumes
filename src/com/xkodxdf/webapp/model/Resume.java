@@ -1,13 +1,14 @@
 package com.xkodxdf.webapp.model;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
 public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private final String fullName;
+    private Map<ContactType, Contact> contacts;
+    private Map<SectionType, Section> sections;
 
 
     public Resume(String fullName) {
@@ -15,8 +16,18 @@ public class Resume implements Comparable<Resume> {
     }
 
     public Resume(String uuid, String fullName) {
+        this(uuid, fullName, new HashMap<>());
+    }
+
+    public Resume(String uuid, String fullName, Map<ContactType, Contact> contacts) {
+        this(uuid, fullName, contacts, new HashMap<>());
+    }
+
+    public Resume(String uuid, String fullName, Map<ContactType, Contact> contacts, Map<SectionType, Section> sections) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
+        Objects.requireNonNull(contacts, "contacts must not be null");
+        Objects.requireNonNull(sections, "sections must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -28,6 +39,52 @@ public class Resume implements Comparable<Resume> {
 
     public String getFullName() {
         return fullName;
+    }
+
+    public Map<ContactType, Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Map<ContactType, Contact> contacts) {
+        Objects.requireNonNull(contacts);
+        this.contacts = contacts;
+    }
+
+    public Map<SectionType, Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(Map<SectionType, Section> sections) {
+        Objects.requireNonNull(sections);
+        this.sections = sections;
+    }
+
+
+    public Contact getContact(ContactType type) {
+        return contacts.get(type);
+    }
+
+    public void setContact(ContactType type, Contact contact) {
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(contact);
+        contacts.put(type, contact);
+    }
+
+    public Section getSection(SectionType type) {
+        return sections.get(type);
+    }
+
+    public void setSection(SectionType type, Section section) {
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(section);
+        sections.put(type, section);
+    }
+
+    public void printResume() {
+        System.out.println("\n" + fullName + "\n");
+        contacts.values().stream().sorted().forEach(Contact::printContact);
+        System.out.println();
+        sections.values().stream().sorted().forEach(Section::printSection);
     }
 
 
@@ -47,9 +104,7 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public int hashCode() {
-        int result = uuid.hashCode();
-        result = 31 * result + fullName.hashCode();
-        return result;
+        return Objects.hash(uuid, fullName, sections);
     }
 
     @Override
