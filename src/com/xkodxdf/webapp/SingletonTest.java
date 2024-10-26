@@ -22,7 +22,7 @@ public class SingletonTest {
         System.out.println(instance.ordinal());
 
         for (SectionType type : SectionType.values()) {
-            System.out.println(type.getTitle());
+            System.out.println(type.getType());
         }
     }
 

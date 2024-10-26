@@ -3,7 +3,7 @@ package com.xkodxdf.webapp;
 import com.xkodxdf.webapp.model.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class ResumeTestData {
@@ -25,7 +25,7 @@ public class ResumeTestData {
         Contact stackOverFlow = new Contact(ContactType.STACKOVERFLOW, "stackoverflow.com/example");
         Contact homePage = new Contact(ContactType.HOMEPAGE, "homepage.com");
 
-        return new HashMap<>() {
+        return new EnumMap<>(ContactType.class) {
             {
                 put(phone.getType(), phone);
                 put(skype.getType(), skype);
@@ -46,7 +46,8 @@ public class ResumeTestData {
 
         TextSection personal = new TextSection(
                 SectionType.PERSONAL,
-                "Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры..."
+                "Аналитический склад ума, сильная логика, креативность, инициативность." +
+                        "Пурист кода и архитектуры..."
         );
 
         ListSection achievements = new ListSection(
@@ -63,7 +64,8 @@ public class ResumeTestData {
                 Arrays.asList(
                         "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2...",
                         "Version control: Subversion, Git, Mercury, ClearCase, Perforce...",
-                        "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite, MS SQL, HSQLDB..."
+                        "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite," +
+                                "MS SQL, HSQLDB..."
                 )
         );
 
@@ -82,7 +84,8 @@ public class ResumeTestData {
                                 new Company.Period(
                                         "Разработчик ПО",
                                         "Разработка информационной модели, проектирование интерфейсов," +
-                                                "реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).",
+                                                "реализация и отладка ПО на мобильной IN платформе" +
+                                                "Siemens @vantage (Java, Unix).",
                                         "01/2005", "02/2007"
                                 ))
                 )
@@ -107,7 +110,7 @@ public class ResumeTestData {
                 )
         );
 
-        return new HashMap<>() {
+        return new EnumMap<>(SectionType.class) {
             {
                 put(objective.getType(), objective);
                 put(personal.getType(), personal);

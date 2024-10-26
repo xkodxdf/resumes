@@ -19,7 +19,7 @@ public abstract class Section implements Comparable<Section> {
 
 
     public final void printSection() {
-        System.out.println(type.getTitle());
+        System.out.println(type.getType());
         printContent();
         System.out.println();
     }

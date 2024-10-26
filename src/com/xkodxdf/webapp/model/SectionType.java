@@ -10,15 +10,15 @@ public enum SectionType {
     EDUCATION("Образование");
 
 
-    private final String title;
+    private final String type;
 
 
-    SectionType(String title) {
-        this.title = title;
+    SectionType(String type) {
+        this.type = type;
     }
 
 
-    public String getTitle() {
-        return title;
+    public String getType() {
+        return type;
     }
 }

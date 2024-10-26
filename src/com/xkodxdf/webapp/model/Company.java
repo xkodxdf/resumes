@@ -33,8 +33,8 @@ public class Company {
 
     @Override
     public String toString() {
-        return "\nCompany name: " + name +
-                "\nwebsite:" + website + "\n" + periods;
+        return "# Имя организации: " + name +
+                "\nсайт: " + website + "\n" + periods;
     }
 
 
@@ -107,8 +107,8 @@ public class Company {
 
         @Override
         public String toString() {
-            return "title: " + title + "\ndescription:" + description +
-                    "\nstartDate:" + startDate + " - " + "endDate" + endDate;
+            return "Должность: " + title + "\nОписание: " + description +
+                    "\nДата начала: " + startDate + " - " + "Дата окончания: " + endDate;
         }
     }
 }

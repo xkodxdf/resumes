@@ -16,11 +16,11 @@ public class Resume implements Comparable<Resume> {
     }
 
     public Resume(String uuid, String fullName) {
-        this(uuid, fullName, new HashMap<>());
+        this(uuid, fullName, new EnumMap<>(ContactType.class));
     }
 
     public Resume(String uuid, String fullName, Map<ContactType, Contact> contacts) {
-        this(uuid, fullName, contacts, new HashMap<>());
+        this(uuid, fullName, contacts, new EnumMap<>(SectionType.class));
     }
 
     public Resume(String uuid, String fullName, Map<ContactType, Contact> contacts, Map<SectionType, Section> sections) {
@@ -30,6 +30,8 @@ public class Resume implements Comparable<Resume> {
         Objects.requireNonNull(sections, "sections must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
+        this.contacts = new EnumMap<>(contacts);
+        this.sections = new EnumMap<>(sections);
     }
 
 
@@ -47,7 +49,7 @@ public class Resume implements Comparable<Resume> {
 
     public void setContacts(Map<ContactType, Contact> contacts) {
         Objects.requireNonNull(contacts);
-        this.contacts = contacts;
+        this.contacts = new EnumMap<>(contacts);
     }
 
     public Map<SectionType, Section> getSections() {
@@ -56,7 +58,7 @@ public class Resume implements Comparable<Resume> {
 
     public void setSections(Map<SectionType, Section> sections) {
         Objects.requireNonNull(sections);
-        this.sections = sections;
+        this.sections = new EnumMap<>(sections);
     }
 
 
@@ -64,27 +66,25 @@ public class Resume implements Comparable<Resume> {
         return contacts.get(type);
     }
 
-    public void setContact(ContactType type, Contact contact) {
-        Objects.requireNonNull(type);
+    public void setContact(Contact contact) {
         Objects.requireNonNull(contact);
-        contacts.put(type, contact);
+        contacts.put(contact.getType(), contact);
     }
 
     public Section getSection(SectionType type) {
         return sections.get(type);
     }
 
-    public void setSection(SectionType type, Section section) {
-        Objects.requireNonNull(type);
+    public void setSection(Section section) {
         Objects.requireNonNull(section);
-        sections.put(type, section);
+        sections.put(section.getType(), section);
     }
 
     public void printResume() {
         System.out.println("\n" + fullName + "\n");
-        contacts.values().stream().sorted().forEach(Contact::printContact);
+        contacts.values().forEach(Contact::printContact);
         System.out.println();
-        sections.values().stream().sorted().forEach(Section::printSection);
+        sections.values().forEach(Section::printSection);
     }
 
 
