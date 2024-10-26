@@ -7,12 +7,7 @@ public class TextSection extends Section {
     private String content;
 
 
-    public TextSection(SectionType type) {
-        this(type, "");
-    }
-
-    public TextSection(SectionType type, String content) {
-        super(type);
+    public TextSection(String content) {
         Objects.requireNonNull(content);
         this.content = content;
     }
@@ -25,12 +20,6 @@ public class TextSection extends Section {
     public void setContent(String content) {
         Objects.requireNonNull(content);
         this.content = content;
-    }
-
-
-    @Override
-    protected void printContent() {
-        System.out.println(content);
     }
 
 

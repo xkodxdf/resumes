@@ -25,6 +25,9 @@ public class Company {
     }
 
     public Company(String name, String website, List<Period> periods) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(website);
+        Objects.requireNonNull(periods);
         this.name = name;
         this.website = website;
         this.periods = periods;
@@ -33,8 +36,11 @@ public class Company {
 
     @Override
     public String toString() {
-        return "# Имя организации: " + name +
-                "\nсайт: " + website + "\n" + periods;
+        return "Company{" +
+                "name='" + name + '\'' +
+                ", website='" + website + '\'' +
+                ", periods=" + periods +
+                '}';
     }
 
 
@@ -45,6 +51,10 @@ public class Company {
         private String startDate;
         private String endDate;
 
+
+        public Period(String title, String startDate, String endDate) {
+            this(title, "", startDate, endDate);
+        }
 
         public Period(String title, String description, String startDate, String endDate) {
             this.title = title;
@@ -107,8 +117,12 @@ public class Company {
 
         @Override
         public String toString() {
-            return "Должность: " + title + "\nОписание: " + description +
-                    "\nДата начала: " + startDate + " - " + "Дата окончания: " + endDate;
+            return "Period{" +
+                    "title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", startDate='" + startDate + '\'' +
+                    ", endDate='" + endDate + '\'' +
+                    '}';
         }
     }
 }

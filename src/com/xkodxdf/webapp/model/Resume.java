@@ -66,25 +66,19 @@ public class Resume implements Comparable<Resume> {
         return contacts.get(type);
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(ContactType type, Contact contact) {
+        Objects.requireNonNull(type);
         Objects.requireNonNull(contact);
-        contacts.put(contact.getType(), contact);
+        contacts.put(type, contact);
     }
 
     public Section getSection(SectionType type) {
         return sections.get(type);
     }
 
-    public void setSection(Section section) {
+    public void setSection(SectionType type, Section section) {
         Objects.requireNonNull(section);
-        sections.put(section.getType(), section);
-    }
-
-    public void printResume() {
-        System.out.println("\n" + fullName + "\n");
-        contacts.values().forEach(Contact::printContact);
-        System.out.println();
-        sections.values().forEach(Section::printSection);
+        sections.put(type, section);
     }
 
 
@@ -112,6 +106,8 @@ public class Resume implements Comparable<Resume> {
         return "Resume{" +
                 "uuid='" + uuid + '\'' +
                 ", fullName='" + fullName + '\'' +
+                ", contacts=" + contacts +
+                ", sections=" + sections +
                 '}';
     }
 }

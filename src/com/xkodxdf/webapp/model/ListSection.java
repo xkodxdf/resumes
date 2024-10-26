@@ -1,6 +1,5 @@
 package com.xkodxdf.webapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,12 +8,7 @@ public class ListSection extends Section {
     private List<String> content;
 
 
-    public ListSection(SectionType type) {
-        this(type, new ArrayList<>());
-    }
-
-    public ListSection(SectionType type, List<String> content) {
-        super(type);
+    public ListSection(List<String> content) {
         Objects.requireNonNull(content);
         this.content = content;
     }
@@ -27,12 +21,6 @@ public class ListSection extends Section {
     public void setContent(List<String> content) {
         Objects.requireNonNull(content);
         this.content = content;
-    }
-
-
-    @Override
-    public void printContent() {
-        content.forEach(e -> System.out.println("* " + e));
     }
 
 

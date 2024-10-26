@@ -9,49 +9,53 @@ import java.util.Map;
 public class ResumeTestData {
 
     public static void main(String[] args) {
-        Resume testResume = new Resume("Name SecondName");
-        testResume.setContacts(generateContacts());
-        testResume.setSections(generateSections());
-        testResume.printResume();
+        Resume testResume = new Resume("uuid1", "Name SecondName", generateContacts(), generateSections());
+        System.out.println(testResume);
+        System.out.println("_".repeat(80));
+        printResume(testResume);
     }
 
 
+    public static void printResume(Resume resume) {
+        System.out.println("\n" + resume.getFullName() + "\n");
+        resume.getContacts().entrySet().forEach(System.out::println);
+        System.out.println();
+        resume.getSections().entrySet().forEach(System.out::println);
+    }
+
     private static Map<ContactType, Contact> generateContacts() {
-        Contact phone = new Contact(ContactType.PHONE, "8-999-999-99-99");
-        Contact skype = new Contact(ContactType.SKYPE, "@example111");
-        Contact email = new Contact(ContactType.EMAIL, "example@example.com");
-        Contact linkedIn = new Contact(ContactType.LINKEDIN, "linked.in/example");
-        Contact gitHub = new Contact(ContactType.GITHUB, "github.com/example");
-        Contact stackOverFlow = new Contact(ContactType.STACKOVERFLOW, "stackoverflow.com/example");
-        Contact homePage = new Contact(ContactType.HOMEPAGE, "homepage.com");
+        Contact phone = new Contact("8-999-999-99-99");
+        Contact skype = new Contact("@example111");
+        Contact email = new Contact("example@example.com");
+        Contact linkedIn = new Contact("linked.in/example");
+        Contact gitHub = new Contact("github.com/example");
+        Contact stackOverFlow = new Contact("stackoverflow.com/example");
+        Contact homePage = new Contact("homepage.com");
 
         return new EnumMap<>(ContactType.class) {
             {
-                put(phone.getType(), phone);
-                put(skype.getType(), skype);
-                put(email.getType(), email);
-                put(linkedIn.getType(), linkedIn);
-                put(gitHub.getType(), gitHub);
-                put(stackOverFlow.getType(), stackOverFlow);
-                put(homePage.getType(), homePage);
+                put(ContactType.PHONE, phone);
+                put(ContactType.SKYPE, skype);
+                put(ContactType.EMAIL, email);
+                put(ContactType.LINKEDIN, linkedIn);
+                put(ContactType.GITHUB, gitHub);
+                put(ContactType.STACKOVERFLOW, stackOverFlow);
+                put(ContactType.HOMEPAGE, homePage);
             }
         };
     }
 
     private static Map<SectionType, Section> generateSections() {
         TextSection objective = new TextSection(
-                SectionType.OBJECTIVE,
                 "Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям..."
         );
 
         TextSection personal = new TextSection(
-                SectionType.PERSONAL,
                 "Аналитический склад ума, сильная логика, креативность, инициативность." +
                         "Пурист кода и архитектуры..."
         );
 
         ListSection achievements = new ListSection(
-                SectionType.ACHIEVEMENT,
                 Arrays.asList(
                         "Организация команды и успешная реализация Java проектов для сторонних заказчиков...",
                         "С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\"...",
@@ -60,7 +64,6 @@ public class ResumeTestData {
         );
 
         ListSection qualification = new ListSection(
-                SectionType.QUALIFICATIONS,
                 Arrays.asList(
                         "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2...",
                         "Version control: Subversion, Git, Mercury, ClearCase, Perforce...",
@@ -70,7 +73,6 @@ public class ResumeTestData {
         );
 
         CompanySection experience = new CompanySection(
-                SectionType.EXPERIENCE,
                 Arrays.asList(
                         new Company(
                                 "Alcatel",
@@ -92,7 +94,6 @@ public class ResumeTestData {
         );
 
         CompanySection education = new CompanySection(
-                SectionType.EDUCATION,
                 Arrays.asList(
                         new Company(
                                 "Заочная физико-техническая школа при МФТИ",
@@ -112,12 +113,12 @@ public class ResumeTestData {
 
         return new EnumMap<>(SectionType.class) {
             {
-                put(objective.getType(), objective);
-                put(personal.getType(), personal);
-                put(achievements.getType(), achievements);
-                put(qualification.getType(), qualification);
-                put(experience.getType(), experience);
-                put(education.getType(), education);
+                put(SectionType.OBJECTIVE, objective);
+                put(SectionType.PERSONAL, personal);
+                put(SectionType.ACHIEVEMENT, achievements);
+                put(SectionType.QUALIFICATIONS, qualification);
+                put(SectionType.EXPERIENCE, experience);
+                put(SectionType.EDUCATION, education);
 
             }
         };
