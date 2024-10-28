@@ -7,7 +7,7 @@ public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, Contact> contacts;
+    private Map<ContactType, String> contacts;
     private Map<SectionType, Section> sections;
 
 
@@ -19,11 +19,11 @@ public class Resume implements Comparable<Resume> {
         this(uuid, fullName, new EnumMap<>(ContactType.class));
     }
 
-    public Resume(String uuid, String fullName, Map<ContactType, Contact> contacts) {
+    public Resume(String uuid, String fullName, Map<ContactType, String> contacts) {
         this(uuid, fullName, contacts, new EnumMap<>(SectionType.class));
     }
 
-    public Resume(String uuid, String fullName, Map<ContactType, Contact> contacts, Map<SectionType, Section> sections) {
+    public Resume(String uuid, String fullName, Map<ContactType, String> contacts, Map<SectionType, Section> sections) {
         Objects.requireNonNull(uuid, "uuid must not be null");
         Objects.requireNonNull(fullName, "fullName must not be null");
         Objects.requireNonNull(contacts, "contacts must not be null");
@@ -43,11 +43,11 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public Map<ContactType, Contact> getContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public void setContacts(Map<ContactType, Contact> contacts) {
+    public void setContacts(Map<ContactType, String> contacts) {
         Objects.requireNonNull(contacts);
         this.contacts = new EnumMap<>(contacts);
     }
@@ -62,11 +62,11 @@ public class Resume implements Comparable<Resume> {
     }
 
 
-    public Contact getContact(ContactType type) {
+    public String getContact(ContactType type) {
         return contacts.get(type);
     }
 
-    public void setContact(ContactType type, Contact contact) {
+    public void setContact(ContactType type, String contact) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(contact);
         contacts.put(type, contact);

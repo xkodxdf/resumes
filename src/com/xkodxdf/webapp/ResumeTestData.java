@@ -23,24 +23,16 @@ public class ResumeTestData {
         resume.getSections().entrySet().forEach(System.out::println);
     }
 
-    private static Map<ContactType, Contact> generateContacts() {
-        Contact phone = new Contact("8-999-999-99-99");
-        Contact skype = new Contact("@example111");
-        Contact email = new Contact("example@example.com");
-        Contact linkedIn = new Contact("linked.in/example");
-        Contact gitHub = new Contact("github.com/example");
-        Contact stackOverFlow = new Contact("stackoverflow.com/example");
-        Contact homePage = new Contact("homepage.com");
-
+    private static Map<ContactType, String> generateContacts() {
         return new EnumMap<>(ContactType.class) {
             {
-                put(ContactType.PHONE, phone);
-                put(ContactType.SKYPE, skype);
-                put(ContactType.EMAIL, email);
-                put(ContactType.LINKEDIN, linkedIn);
-                put(ContactType.GITHUB, gitHub);
-                put(ContactType.STACKOVERFLOW, stackOverFlow);
-                put(ContactType.HOMEPAGE, homePage);
+                put(ContactType.PHONE, "8-999-999-99-99");
+                put(ContactType.SKYPE, "@example111");
+                put(ContactType.EMAIL, "example@example.com");
+                put(ContactType.LINKEDIN, "linked.in/example");
+                put(ContactType.GITHUB, "github.com/example");
+                put(ContactType.STACKOVERFLOW, "stackoverflow.com/example");
+                put(ContactType.HOMEPAGE, "homepage.com");
             }
         };
     }
