@@ -53,6 +53,10 @@ public class Company {
         }
 
         public Period(String title, String description, String startDate, String endDate) {
+            Objects.requireNonNull(title, "title must not be null");
+            Objects.requireNonNull(description, "description must not be null");
+            Objects.requireNonNull(startDate, "startDate must not be null");
+            Objects.requireNonNull(endDate, "endDate must not be null");
             this.title = title;
             this.description = description;
             this.startDate = startDate;
