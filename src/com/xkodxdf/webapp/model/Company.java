@@ -65,10 +65,10 @@ public class Company {
 
     public static class Period {
 
-        private String title;
-        private String description;
-        private String startDate;
-        private String endDate;
+        private final String title;
+        private final String description;
+        private final String startDate;
+        private final String endDate;
 
 
         public Period(String title, String startDate, String endDate) {
@@ -91,36 +91,16 @@ public class Company {
             return title;
         }
 
-        public void setTitle(String title) {
-            Objects.requireNonNull(title);
-            this.title = title;
-        }
-
         public String getDescription() {
             return description;
-        }
-
-        public void setDescription(String description) {
-            Objects.requireNonNull(description);
-            this.description = description;
         }
 
         public String getStartDate() {
             return startDate;
         }
 
-        public void setStartDate(String startDate) {
-            Objects.requireNonNull(startDate);
-            this.startDate = startDate;
-        }
-
         public String getEndDate() {
             return endDate;
-        }
-
-        public void setEndDate(String endDate) {
-            Objects.requireNonNull(endDate);
-            this.endDate = endDate;
         }
 
 

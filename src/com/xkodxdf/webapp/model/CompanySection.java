@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class CompanySection extends Section {
 
-    private List<Company> content;
+    private final List<Company> content;
 
 
     public CompanySection(List<Company> content) {
@@ -16,11 +16,6 @@ public class CompanySection extends Section {
 
     public List<Company> getContent() {
         return content;
-    }
-
-    public void setContent(List<Company> content) {
-        Objects.requireNonNull(content);
-        this.content = content;
     }
 
 

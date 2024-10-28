@@ -17,11 +17,6 @@ public class TextSection extends Section {
         return content;
     }
 
-    public void setContent(String content) {
-        Objects.requireNonNull(content);
-        this.content = content;
-    }
-
 
     @Override
     public boolean equals(Object o) {

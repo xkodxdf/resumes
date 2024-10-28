@@ -7,8 +7,8 @@ public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, String> contacts;
-    private Map<SectionType, Section> sections;
+    private final Map<ContactType, String> contacts;
+    private final Map<SectionType, Section> sections;
 
 
     public Resume(String fullName) {
@@ -47,18 +47,8 @@ public class Resume implements Comparable<Resume> {
         return contacts;
     }
 
-    public void setContacts(Map<ContactType, String> contacts) {
-        Objects.requireNonNull(contacts);
-        this.contacts = new EnumMap<>(contacts);
-    }
-
     public Map<SectionType, Section> getSections() {
         return sections;
-    }
-
-    public void setSections(Map<SectionType, Section> sections) {
-        Objects.requireNonNull(sections);
-        this.sections = new EnumMap<>(sections);
     }
 
 
@@ -66,9 +56,7 @@ public class Resume implements Comparable<Resume> {
         return contacts.get(type);
     }
 
-    public void setContact(ContactType type, String contact) {
-        Objects.requireNonNull(type);
-        Objects.requireNonNull(contact);
+    public void addContact(ContactType type, String contact) {
         contacts.put(type, contact);
     }
 
@@ -76,8 +64,7 @@ public class Resume implements Comparable<Resume> {
         return sections.get(type);
     }
 
-    public void setSection(SectionType type, Section section) {
-        Objects.requireNonNull(section);
+    public void addSection(SectionType type, Section section) {
         sections.put(type, section);
     }
 

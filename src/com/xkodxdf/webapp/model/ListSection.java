@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class ListSection extends Section {
 
-    private List<String> content;
+    private final List<String> content;
 
 
     public ListSection(List<String> content) {
@@ -16,11 +16,6 @@ public class ListSection extends Section {
 
     public List<String> getContent() {
         return content;
-    }
-
-    public void setContent(List<String> content) {
-        Objects.requireNonNull(content);
-        this.content = content;
     }
 
 
