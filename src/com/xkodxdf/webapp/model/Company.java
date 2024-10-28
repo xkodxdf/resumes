@@ -6,8 +6,7 @@ import java.util.Objects;
 
 public class Company {
 
-    private final String name;
-    private final String website;
+    private final Link homePage;
     private final List<Period> periods;
 
 
@@ -28,8 +27,7 @@ public class Company {
         Objects.requireNonNull(name);
         Objects.requireNonNull(website);
         Objects.requireNonNull(periods);
-        this.name = name;
-        this.website = website;
+        this.homePage = new Link(name, website);
         this.periods = periods;
     }
 
@@ -37,12 +35,10 @@ public class Company {
     @Override
     public String toString() {
         return "Company{" +
-                "name='" + name + '\'' +
-                ", website='" + website + '\'' +
+                "homePage=" + homePage +
                 ", periods=" + periods +
                 '}';
     }
-
 
     public static class Period {
 

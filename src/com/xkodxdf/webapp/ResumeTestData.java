@@ -75,14 +75,14 @@ public class ResumeTestData {
         CompanySection experience = new CompanySection(
                 Arrays.asList(
                         new Company(
-                                "Alcatel",
+                                "Alcatel", "alcatel.com",
                                 new Company.Period(
                                         "Инженер по аппаратному и программному тестированию",
                                         "Тестирование, отладка, внедрение ПО цифровой телефонной станции " +
                                                 "Alcatel 1000 S12 (CHILL, ASM).",
                                         "09/1997", "01/2005")),
                         new Company(
-                                "Siemens AG",
+                                "Siemens AG", "siemens.com",
                                 new Company.Period(
                                         "Разработчик ПО",
                                         "Разработка информационной модели, проектирование интерфейсов," +
@@ -102,7 +102,7 @@ public class ResumeTestData {
                                 )),
 
                         new Company(
-                                "Alcatel",
+                                "Alcatel", "alcatel.com",
                                 new Company.Period(
                                         "", "6 месяцев обучения цифровым телефонным сетям (Москва)",
                                         "09/1997", "03/1998"
