@@ -30,19 +30,16 @@ public class Link {
 
 
     @Override
-    public boolean equals(Object index) {
-        if (this == index) return true;
-        if (index == null || getClass() != index.getClass()) return false;
-
-        Link link = (Link) index;
-        return name.equals(link.name) && url.equals(link.url);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Link link = (Link) o;
+        return Objects.equals(name, link.name) && Objects.equals(url, link.url);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + url.hashCode();
-        return result;
+        return Objects.hash(name, url);
     }
 
     @Override

@@ -33,19 +33,16 @@ public class Company {
 
 
     @Override
-    public boolean equals(Object index) {
-        if (this == index) return true;
-        if (index == null || getClass() != index.getClass()) return false;
-
-        Company company = (Company) index;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
         return Objects.equals(homePage, company.homePage) && Objects.equals(periods, company.periods);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(homePage);
-        result = 31 * result + Objects.hashCode(periods);
-        return result;
+        return Objects.hash(homePage, periods);
     }
 
     @Override
@@ -55,6 +52,7 @@ public class Company {
                 ", periods=" + periods +
                 '}';
     }
+
 
     public static class Period {
 

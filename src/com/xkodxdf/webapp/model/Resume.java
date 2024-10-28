@@ -88,17 +88,17 @@ public class Resume implements Comparable<Resume> {
     }
 
     @Override
-    public boolean equals(Object index) {
-        if (this == index) return true;
-        if (index == null || getClass() != index.getClass()) return false;
-
-        Resume resume = (Resume) index;
-        return uuid.equals(resume.uuid) && fullName.equals(resume.fullName);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        return Objects.equals(uuid, resume.uuid) && Objects.equals(fullName, resume.fullName)
+                && Objects.equals(contacts, resume.contacts) && Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName, sections);
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override
