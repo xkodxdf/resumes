@@ -33,6 +33,22 @@ public class Company {
 
 
     @Override
+    public boolean equals(Object index) {
+        if (this == index) return true;
+        if (index == null || getClass() != index.getClass()) return false;
+
+        Company company = (Company) index;
+        return Objects.equals(homePage, company.homePage) && Objects.equals(periods, company.periods);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(homePage);
+        result = 31 * result + Objects.hashCode(periods);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Company{" +
                 "homePage=" + homePage +
