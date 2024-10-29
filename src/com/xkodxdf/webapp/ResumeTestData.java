@@ -16,7 +16,11 @@ public class ResumeTestData {
     }
 
 
-    public static void printResume(Resume resume) {
+    public static Resume getTestResume(String uuid, String fullName) {
+        return new Resume(uuid, fullName, generateContacts(), generateSections());
+    }
+
+    private static void printResume(Resume resume) {
         System.out.println("\n" + resume.getFullName() + "\n");
         resume.getContacts().entrySet().forEach(System.out::println);
         System.out.println();

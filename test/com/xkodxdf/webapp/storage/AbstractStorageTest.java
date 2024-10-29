@@ -1,5 +1,6 @@
 package com.xkodxdf.webapp.storage;
 
+import com.xkodxdf.webapp.ResumeTestData;
 import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.Resume;
@@ -34,11 +35,11 @@ public abstract class AbstractStorageTest {
 
 
     static {
-        resume1 = new Resume(UUID_1, NAME_1);
-        resume2 = new Resume(UUID_2, NAME_2);
-        resume3 = new Resume(UUID_3, NAME_3);
-        resume4 = new Resume(UUID_4, NAME_3);
-        notExistingResume = new Resume(NOT_EXISTING_RESUME, NAME_5);
+        resume1 = ResumeTestData.getTestResume(UUID_1, NAME_1);
+        resume2 = ResumeTestData.getTestResume(UUID_2, NAME_2);
+        resume3 = ResumeTestData.getTestResume(UUID_3, NAME_3);
+        resume4 = ResumeTestData.getTestResume(UUID_4, NAME_3);
+        notExistingResume = ResumeTestData.getTestResume(NOT_EXISTING_RESUME, NAME_5);
     }
 
 
