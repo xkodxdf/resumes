@@ -41,10 +41,9 @@ public class MainFile {
         File[] files = root.listFiles();
         if (Objects.nonNull(files)) {
             for (File file : files) {
-                String[] path = file.getParent().split("\\\\");
                 System.out.println(file.isDirectory() ?
                         "\nDIRECTORY:" + file.getName().toUpperCase()
-                        : "../" + path[path.length - 1] + "/" + file.getName());
+                        : "../" + file.getParentFile().getName() + "/" + file.getName());
                 printProjectStructure(file);
             }
         }
