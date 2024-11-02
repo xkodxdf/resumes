@@ -12,7 +12,6 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
-
     @Override
     public final void save(Resume r) {
         LOG.info("Save: " + r);
@@ -51,7 +50,6 @@ public abstract class AbstractStorage<SK> implements Storage {
         return ret;
     }
 
-
     private SK getExistingSearchKey(String uuid) {
         LOG.info("getExistingSearchKey: " + uuid);
         SK searchKey = getSearchKey(uuid);
@@ -71,7 +69,6 @@ public abstract class AbstractStorage<SK> implements Storage {
         }
         return searchKey;
     }
-
 
     protected abstract boolean isExist(SK searchKey);
 

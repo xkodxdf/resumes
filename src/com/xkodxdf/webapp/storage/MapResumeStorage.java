@@ -8,7 +8,6 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
 
     private final Map<String, Resume> storage = new HashMap<>();
 
-
     @Override
     public int size() {
         return storage.size();
@@ -18,7 +17,6 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     public void clear() {
         storage.clear();
     }
-
 
     @Override
     protected boolean isExist(Resume searchKey) {

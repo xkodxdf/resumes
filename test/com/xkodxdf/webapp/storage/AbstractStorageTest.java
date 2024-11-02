@@ -33,7 +33,6 @@ public abstract class AbstractStorageTest {
     protected static final Resume resume4;
     protected static final Resume notExistingResume;
 
-
     static {
         resume1 = ResumeTestData.getTestResume(UUID_1, NAME_1);
         resume2 = ResumeTestData.getTestResume(UUID_2, NAME_2);
@@ -42,11 +41,9 @@ public abstract class AbstractStorageTest {
         notExistingResume = ResumeTestData.getTestResume(NOT_EXISTING_RESUME, NAME_5);
     }
 
-
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
-
 
     @Before
     public void setupStorage() {
@@ -60,7 +57,6 @@ public abstract class AbstractStorageTest {
     public void resetStorage() {
         storage.clear();
     }
-
 
     @Test
     public void size() {

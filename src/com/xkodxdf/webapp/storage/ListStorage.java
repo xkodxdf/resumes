@@ -9,7 +9,6 @@ public class ListStorage extends AbstractStorage<Integer> {
 
     private final List<Resume> storage = new ArrayList<>();
 
-
     @Override
     public int size() {
         return storage.size();
@@ -19,7 +18,6 @@ public class ListStorage extends AbstractStorage<Integer> {
     public void clear() {
         storage.clear();
     }
-
 
     @Override
     protected boolean isExist(Integer index) {

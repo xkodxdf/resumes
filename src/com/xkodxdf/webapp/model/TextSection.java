@@ -6,17 +6,14 @@ public class TextSection extends Section {
 
     private String content;
 
-
     public TextSection(String content) {
         Objects.requireNonNull(content);
         this.content = content;
     }
 
-
     public String getContent() {
         return content;
     }
-
 
     @Override
     public boolean equals(Object o) {

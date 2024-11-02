@@ -7,17 +7,14 @@ public class CompanySection extends Section {
 
     private final List<Company> content;
 
-
     public CompanySection(List<Company> content) {
         Objects.requireNonNull(content);
         this.content = content;
     }
 
-
     public List<Company> getContent() {
         return content;
     }
-
 
     @Override
     public boolean equals(Object o) {

@@ -7,17 +7,14 @@ public class ListSection extends Section {
 
     private final List<String> content;
 
-
     public ListSection(List<String> content) {
         Objects.requireNonNull(content);
         this.content = content;
     }
 
-
     public List<String> getContent() {
         return content;
     }
-
 
     @Override
     public boolean equals(Object o) {

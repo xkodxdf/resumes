@@ -10,14 +10,11 @@ public enum ContactType {
     STACKOVERFLOW("StackOverFlow"),
     HOMEPAGE("Домашняя страница");
 
-
     private final String type;
-
 
     ContactType(String type) {
         this.type = type;
     }
-
 
     public String getType() {
         return type;

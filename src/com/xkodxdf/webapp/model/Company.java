@@ -9,7 +9,6 @@ public class Company {
     private final Link homePage;
     private final List<Period> periods;
 
-
     public Company(String name, Period... periods) {
         this(name, "", Arrays.asList(periods));
     }
@@ -31,7 +30,6 @@ public class Company {
         this.periods = periods;
     }
 
-
     public Link getHomePage() {
         return homePage;
     }
@@ -39,7 +37,6 @@ public class Company {
     public List<Period> getPeriods() {
         return periods;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -62,14 +59,12 @@ public class Company {
                 '}';
     }
 
-
     public static class Period {
 
         private final String title;
         private final String description;
         private final String startDate;
         private final String endDate;
-
 
         public Period(String title, String startDate, String endDate) {
             this(title, "", startDate, endDate);
@@ -86,7 +81,6 @@ public class Company {
             this.endDate = endDate;
         }
 
-
         public String getTitle() {
             return title;
         }
@@ -102,7 +96,6 @@ public class Company {
         public String getEndDate() {
             return endDate;
         }
-
 
         @Override
         public boolean equals(Object o) {

@@ -6,16 +6,12 @@ import com.xkodxdf.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Array based storage for Resumes
- */
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     protected static final int STORAGE_LIMIT = 10000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
-
 
     @Override
     public int size() {
@@ -27,7 +23,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
-
 
     @Override
     protected boolean isExist(Integer index) {
@@ -64,7 +59,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected List<Resume> doCopy() {
         return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
-
 
     protected abstract void insertElement(Resume r, int index);
 

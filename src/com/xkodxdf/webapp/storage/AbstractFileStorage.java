@@ -13,7 +13,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     private final File directory;
 
-
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
@@ -24,7 +23,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
         this.directory = directory;
     }
-
 
     @Override
     public int size() {
@@ -45,7 +43,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             doDelete(f);
         }
     }
-
 
     @Override
     protected boolean isExist(File file) {
@@ -105,7 +102,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             }
         }};
     }
-
 
     protected abstract void doWrite(Resume r, File file) throws IOException;
 

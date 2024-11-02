@@ -9,14 +9,11 @@ public enum SectionType {
     EXPERIENCE("Опыт работы"),
     EDUCATION("Образование");
 
-
     private final String type;
-
 
     SectionType(String type) {
         this.type = type;
     }
-
 
     public String getType() {
         return type;

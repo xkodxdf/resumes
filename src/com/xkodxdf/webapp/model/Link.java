@@ -7,7 +7,6 @@ public class Link {
     private final String name;
     private final String url;
 
-
     public Link(String name) {
         this(name, "");
     }
@@ -19,7 +18,6 @@ public class Link {
         this.url = url;
     }
 
-
     public String getName() {
         return name;
     }
@@ -27,7 +25,6 @@ public class Link {
     public String getUrl() {
         return url;
     }
-
 
     @Override
     public boolean equals(Object o) {

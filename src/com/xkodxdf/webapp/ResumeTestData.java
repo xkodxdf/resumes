@@ -15,7 +15,6 @@ public class ResumeTestData {
         printResume(testResume);
     }
 
-
     public static Resume getTestResume(String uuid, String fullName) {
         return new Resume(uuid, fullName, generateContacts(), generateSections());
     }
