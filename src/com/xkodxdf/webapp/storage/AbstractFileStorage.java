@@ -29,16 +29,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     public int size() {
         String[] fileNames = directory.list();
-        return fileNames != null ? fileNames.length : 0;
+        if (fileNames == null) {
+            throw new StorageException(directory.getName() + ":directory error", "");
+        }
+        return fileNames.length;
     }
 
     @Override
     public void clear() {
         File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                doDelete(f);
-            }
+        if (files == null) {
+            throw new StorageException(directory.getName() + ":directory error", "");
+        }
+        for (File f : files) {
+            doDelete(f);
         }
     }
 
@@ -56,8 +60,9 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doSave(Resume r, File file) {
         try {
-            file.createNewFile();
-            doWrite(r, file);
+            if (file.createNewFile()) {
+                doWrite(r, file);
+            }
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -83,21 +88,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        file.delete();
+        if (!file.delete()) {
+            throw new StorageException("File delete error", file.getName());
+        }
     }
 
     @Override
     protected List<Resume> doCopy() {
         File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException(directory.getName() + ":directory error", "");
+        }
         return new ArrayList<>() {{
-            if (files != null) {
-                for (File f : files) {
-                    try {
-                        add(doRead(f));
-                    } catch (IOException e) {
-                        throw new StorageException("IO error", f.getName(), e);
-                    }
-                }
+            for (File f : files) {
+                add(doGet(f));
             }
         }};
     }
