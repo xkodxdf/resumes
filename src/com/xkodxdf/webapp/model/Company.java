@@ -1,10 +1,19 @@
 package com.xkodxdf.webapp.model;
 
+import com.xkodxdf.webapp.util.DateUtil;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Company {
+import static com.xkodxdf.webapp.util.DateUtil.NOW;
+
+public class Company implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Link homePage;
     private final List<Period> periods;
@@ -59,18 +68,24 @@ public class Company {
                 '}';
     }
 
-    public static class Period {
+    public static class Period implements Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         private final String title;
         private final String description;
-        private final String startDate;
-        private final String endDate;
+        private final LocalDate startDate;
+        private final LocalDate endDate;
 
-        public Period(String title, String startDate, String endDate) {
-            this(title, "", startDate, endDate);
+        public Period(String title, String description, int startYear, Month startMonth) {
+            this(title, description, DateUtil.of(startYear, startMonth), NOW);
         }
 
-        public Period(String title, String description, String startDate, String endDate) {
+        public Period(String title, String description, int startYear, Month startMonth, int endYear, Month endMonth) {
+            this(title, description, DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth));
+        }
+
+        public Period(String title, String description, LocalDate startDate, LocalDate endDate) {
             Objects.requireNonNull(title, "title must not be null");
             Objects.requireNonNull(description, "description must not be null");
             Objects.requireNonNull(startDate, "startDate must not be null");
@@ -89,11 +104,11 @@ public class Company {
             return description;
         }
 
-        public String getStartDate() {
+        public LocalDate getStartDate() {
             return startDate;
         }
 
-        public String getEndDate() {
+        public LocalDate getEndDate() {
             return endDate;
         }
 

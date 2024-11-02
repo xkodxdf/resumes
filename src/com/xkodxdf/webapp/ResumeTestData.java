@@ -1,7 +1,9 @@
 package com.xkodxdf.webapp;
 
 import com.xkodxdf.webapp.model.*;
+import com.xkodxdf.webapp.util.DateUtil;
 
+import java.time.Month;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
@@ -75,7 +77,7 @@ public class ResumeTestData {
                                         "Инженер по аппаратному и программному тестированию",
                                         "Тестирование, отладка, внедрение ПО цифровой телефонной станции " +
                                                 "Alcatel 1000 S12 (CHILL, ASM).",
-                                        "09/1997", "01/2005")),
+                                        DateUtil.of(1997, Month.AUGUST), DateUtil.of(2004, Month.OCTOBER))),
                         new Company(
                                 "Siemens AG", "siemens.com",
                                 new Company.Period(
@@ -83,7 +85,7 @@ public class ResumeTestData {
                                         "Разработка информационной модели, проектирование интерфейсов," +
                                                 "реализация и отладка ПО на мобильной IN платформе" +
                                                 "Siemens @vantage (Java, Unix).",
-                                        "01/2005", "02/2007"
+                                        DateUtil.of(2005, Month.SEPTEMBER), DateUtil.of(2006, Month.JULY)
                                 ))
                 )
         );
@@ -93,14 +95,15 @@ public class ResumeTestData {
                         new Company(
                                 "Заочная физико-техническая школа при МФТИ",
                                 new Company.Period(
-                                        "", "Закончил с отличием", "09/1984", "06/1987"
+                                        "", "Закончил с отличием", DateUtil.of(1988, Month.OCTOBER),
+                                        DateUtil.of(1990, Month.DECEMBER)
                                 )),
 
                         new Company(
                                 "Alcatel", "alcatel.com",
                                 new Company.Period(
                                         "", "6 месяцев обучения цифровым телефонным сетям (Москва)",
-                                        "09/1997", "03/1998"
+                                        DateUtil.of(1992, Month.AUGUST), DateUtil.of(1996, Month.JUNE)
                                 ))
 
                 )

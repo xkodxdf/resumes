@@ -1,11 +1,18 @@
 package com.xkodxdf.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class CompanySection extends Section {
 
+    private static final long serialVersionUID = 1L;
+
     private final List<Company> content;
+
+    public CompanySection(Company... companies) {
+        this(Arrays.asList(companies));
+    }
 
     public CompanySection(List<Company> content) {
         Objects.requireNonNull(content);

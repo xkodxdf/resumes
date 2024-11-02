@@ -9,12 +9,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
+
+    protected static final File STORAGE_DIR = new File(System.getProperty("user.dir") + "/file_storage");
 
     protected final Storage storage;
 
@@ -27,6 +30,7 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_4 = "uuid4";
     protected static final String NOT_EXISTING_RESUME = "abracadabra";
     protected static final String NAME_5 = "dummycadabra";
+
     protected static final Resume resume1;
     protected static final Resume resume2;
     protected static final Resume resume3;
@@ -34,6 +38,7 @@ public abstract class AbstractStorageTest {
     protected static final Resume notExistingResume;
 
     static {
+        STORAGE_DIR.mkdir();
         resume1 = ResumeTestData.getTestResume(UUID_1, NAME_1);
         resume2 = ResumeTestData.getTestResume(UUID_2, NAME_2);
         resume3 = ResumeTestData.getTestResume(UUID_3, NAME_3);
@@ -91,10 +96,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateExistingResume() {
-        Resume newResume = new Resume(UUID_1, NAME_1);
-        assertNotSame(newResume, storage.get(UUID_1));
+        Resume newResume = new Resume(UUID_1, "New Name");
+        assertNotEquals(newResume, storage.get(UUID_1));
         storage.update(newResume);
-        assertSame(newResume, storage.get(UUID_1));
+        assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
