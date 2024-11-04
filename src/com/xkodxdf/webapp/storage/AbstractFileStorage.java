@@ -4,9 +4,10 @@ import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
@@ -94,11 +95,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (files == null) {
             throw new StorageException(directory.getName() + ":directory error", "");
         }
-        return new ArrayList<>() {{
-            for (File f : files) {
-                add(doGet(f));
-            }
-        }};
+        return Arrays.stream(files).map(this::doGet).collect(Collectors.toList());
     }
 
     protected abstract Resume doRead(InputStream is) throws IOException;
