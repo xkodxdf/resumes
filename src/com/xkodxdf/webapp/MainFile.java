@@ -9,7 +9,7 @@ public class MainFile {
 
     public static void main(String[] args) {
         File baseDir = new File(System.getProperty("user.dir"));
-        printProjectStructure(baseDir);
+        printProjectStructure(baseDir, "");
         System.out.println("#".repeat(80));
 
 
@@ -37,14 +37,14 @@ public class MainFile {
         }
     }
 
-    private static void printProjectStructure(File root) {
+    private static void printProjectStructure(File root, String indent) {
         File[] files = root.listFiles();
         if (Objects.nonNull(files)) {
             for (File file : files) {
                 System.out.println(file.isDirectory() ?
-                        "\nDIRECTORY:" + file.getName().toUpperCase()
-                        : "../" + file.getParentFile().getName() + "/" + file.getName());
-                printProjectStructure(file);
+                        indent + "DIRECTORY:" + file.getName().toUpperCase()
+                        : indent + "./" + file.getParentFile().getName() + "/" + file.getName());
+                printProjectStructure(file, indent + "| ");
             }
         }
     }
