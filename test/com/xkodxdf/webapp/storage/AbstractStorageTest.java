@@ -4,10 +4,7 @@ import com.xkodxdf.webapp.ResumeTestData;
 import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.Resume;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.util.Arrays;
@@ -38,7 +35,6 @@ public abstract class AbstractStorageTest {
     protected static final Resume notExistingResume;
 
     static {
-        STORAGE_DIR.mkdir();
         resume1 = ResumeTestData.getTestResume(UUID_1, NAME_1);
         resume2 = ResumeTestData.getTestResume(UUID_2, NAME_2);
         resume3 = ResumeTestData.getTestResume(UUID_3, NAME_3);
@@ -48,6 +44,16 @@ public abstract class AbstractStorageTest {
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
+    }
+
+    @BeforeClass
+    public static void makeStorageDir() {
+        STORAGE_DIR.mkdir();
+    }
+
+    @AfterClass
+    public static void deleteStorageDir() {
+        STORAGE_DIR.delete();
     }
 
     @Before
