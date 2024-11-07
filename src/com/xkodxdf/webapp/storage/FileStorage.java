@@ -34,16 +34,12 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        String[] fileNames = directory.list();
-        if (fileNames == null) {
-            throw new StorageException(directory.getName() + ":directory error", "");
-        }
-        return fileNames.length;
+        return getFiles().length;
     }
 
     @Override
     public void clear() {
-        File[] files = getFiles(directory);
+        File[] files = getFiles();
         for (File f : files) {
             doDelete(f);
         }
@@ -96,11 +92,11 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopy() {
-        File[] files = getFiles(directory);
+        File[] files = getFiles();
         return Arrays.stream(files).map(this::doGet).collect(Collectors.toList());
     }
 
-    private File[] getFiles(File directory) {
+    private File[] getFiles() {
         File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException(directory.getName() + ":directory error", "");
