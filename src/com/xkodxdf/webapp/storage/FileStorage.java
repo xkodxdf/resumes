@@ -2,6 +2,7 @@ package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
+import com.xkodxdf.webapp.storage.serializable.SerializableStorage;
 
 import java.io.*;
 import java.util.Arrays;

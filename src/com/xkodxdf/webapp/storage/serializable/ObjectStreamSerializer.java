@@ -1,4 +1,4 @@
-package com.xkodxdf.webapp.storage;
+package com.xkodxdf.webapp.storage.serializable;
 
 import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
