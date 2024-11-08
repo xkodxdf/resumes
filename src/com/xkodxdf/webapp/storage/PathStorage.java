@@ -2,7 +2,7 @@ package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
-import com.xkodxdf.webapp.storage.serializable.SerializableStorage;
+import com.xkodxdf.webapp.storage.serializer.StreamSerializer;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 public class PathStorage extends AbstractStorage<Path> {
 
     private final Path directory;
-    private SerializableStorage serializer;
+    private StreamSerializer serializer;
 
-    protected PathStorage(String dir, SerializableStorage serializer) {
+    protected PathStorage(String dir, StreamSerializer serializer) {
         this.directory = Path.of(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory)) {
@@ -30,7 +30,7 @@ public class PathStorage extends AbstractStorage<Path> {
         this.serializer = serializer;
     }
 
-    public void setSerializer(SerializableStorage serializer) {
+    public void setSerializer(StreamSerializer serializer) {
         this.serializer = serializer;
     }
 
@@ -59,7 +59,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("IO error", path.getFileName().toString(), e);
+            throw new StorageException("IO error", e);
         }
         doUpdate(r, path);
     }
@@ -69,7 +69,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return serializer.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
         } catch (IOException e) {
-            throw new StorageException("IO error", path.getFileName().toString(), e);
+            throw new StorageException("IO error", getFileName(path), e);
         }
     }
 
@@ -78,7 +78,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             serializer.doWrite(r, new BufferedOutputStream(new FileOutputStream(path.toFile())));
         } catch (IOException e) {
-            throw new StorageException("IO error", path.getFileName().toString());
+            throw new StorageException("IO error", getFileName(path), e);
         }
     }
 
@@ -87,7 +87,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File delete error", path.getFileName().toString(), e);
+            throw new StorageException("File delete error", getFileName(path), e);
         }
     }
 
@@ -100,7 +100,11 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException(directory.getFileName().toString() + ":directory error", "");
+            throw new StorageException("Directory error", e);
         }
+    }
+
+    private String getFileName(Path path) {
+        return path.getFileName().toString();
     }
 }

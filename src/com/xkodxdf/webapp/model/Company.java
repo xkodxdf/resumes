@@ -1,7 +1,11 @@
 package com.xkodxdf.webapp.model;
 
 import com.xkodxdf.webapp.util.DateUtil;
+import com.xkodxdf.webapp.util.LocalDateAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -11,12 +15,16 @@ import java.util.Objects;
 
 import static com.xkodxdf.webapp.util.DateUtil.NOW;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Link homePage;
-    private final List<Period> periods;
+    private Link homePage;
+    private List<Period> periods;
+
+    public Company() {
+    }
 
     public Company(String name, Period... periods) {
         this(name, "", Arrays.asList(periods));
@@ -68,14 +76,20 @@ public class Company implements Serializable {
                 '}';
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        private final String title;
-        private final String description;
-        private final LocalDate startDate;
-        private final LocalDate endDate;
+        private String title;
+        private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endDate;
+
+        public Period() {
+        }
 
         public Period(String title, String description, int startYear, Month startMonth) {
             this(title, description, DateUtil.of(startYear, startMonth), NOW);

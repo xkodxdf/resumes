@@ -1,6 +1,6 @@
 package com.xkodxdf.webapp.storage;
 
-import com.xkodxdf.webapp.storage.serializable.ObjectStreamSerializer;
+import com.xkodxdf.webapp.storage.serializer.ObjectStreamSerializer;
 
 public class FileStorageTest extends AbstractStorageTest {
 

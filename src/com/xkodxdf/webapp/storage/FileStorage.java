@@ -2,7 +2,7 @@ package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.exception.StorageException;
 import com.xkodxdf.webapp.model.Resume;
-import com.xkodxdf.webapp.storage.serializable.SerializableStorage;
+import com.xkodxdf.webapp.storage.serializer.StreamSerializer;
 
 import java.io.*;
 import java.util.Arrays;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class FileStorage extends AbstractStorage<File> {
 
     private final File directory;
-    private SerializableStorage serializer;
+    private StreamSerializer serializer;
 
-    protected FileStorage(File directory, SerializableStorage serializer) {
+    protected FileStorage(File directory, StreamSerializer serializer) {
         Objects.requireNonNull(directory, "directory must not be null");
         Objects.requireNonNull(serializer, "serializer must not be null");
         if (!directory.isDirectory()) {
@@ -28,7 +28,7 @@ public class FileStorage extends AbstractStorage<File> {
         this.serializer = serializer;
     }
 
-    public void setSerializer(SerializableStorage serializer) {
+    public void setSerializer(StreamSerializer serializer) {
         this.serializer = serializer;
     }
 
@@ -99,7 +99,7 @@ public class FileStorage extends AbstractStorage<File> {
     private File[] getFiles() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException(directory.getName() + ":directory error", "");
+            throw new StorageException("Directory error", directory.getName());
         }
         return files;
     }
