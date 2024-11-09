@@ -43,8 +43,8 @@ public class Resume implements Comparable<Resume>, Serializable {
         Objects.requireNonNull(sections, "sections must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
-        this.contacts = new EnumMap<>(contacts);
-        this.sections = new EnumMap<>(sections);
+        this.contacts = contacts.isEmpty() ? new EnumMap<>(ContactType.class) : new EnumMap<>(contacts);
+        this.sections = sections.isEmpty() ? new EnumMap<>(SectionType.class) : new EnumMap<>(sections);
     }
 
     public String getUuid() {

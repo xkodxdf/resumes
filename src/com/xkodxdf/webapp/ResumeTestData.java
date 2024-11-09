@@ -29,17 +29,15 @@ public class ResumeTestData {
     }
 
     private static Map<ContactType, String> generateContacts() {
-        return new EnumMap<>(ContactType.class) {
-            {
-                put(ContactType.PHONE, "8-999-999-99-99");
-                put(ContactType.SKYPE, "@example111");
-                put(ContactType.EMAIL, "example@example.com");
-                put(ContactType.LINKEDIN, "linked.in/example");
-                put(ContactType.GITHUB, "github.com/example");
-                put(ContactType.STACKOVERFLOW, "stackoverflow.com/example");
-                put(ContactType.HOMEPAGE, "homepage.com");
-            }
-        };
+        return new EnumMap<>(ContactType.class) {{
+            put(ContactType.PHONE, "8-999-999-99-99");
+            put(ContactType.SKYPE, "@example111");
+            put(ContactType.EMAIL, "example@example.com");
+            put(ContactType.LINKEDIN, "linked.in/example");
+            put(ContactType.GITHUB, "github.com/example");
+            put(ContactType.STACKOVERFLOW, "stackoverflow.com/example");
+            put(ContactType.HOMEPAGE, "homepage.com");
+        }};
     }
 
     private static Map<SectionType, Section> generateSections() {
@@ -109,16 +107,13 @@ public class ResumeTestData {
                 )
         );
 
-        return new EnumMap<>(SectionType.class) {
-            {
-                put(SectionType.OBJECTIVE, objective);
-                put(SectionType.PERSONAL, personal);
-                put(SectionType.ACHIEVEMENT, achievements);
-                put(SectionType.QUALIFICATIONS, qualification);
-//                put(SectionType.EXPERIENCE, experience);
-//                put(SectionType.EDUCATION, education);
-
-            }
-        };
+        return new EnumMap<>(SectionType.class) {{
+            put(SectionType.OBJECTIVE, objective);
+            put(SectionType.PERSONAL, personal);
+            put(SectionType.ACHIEVEMENT, achievements);
+            put(SectionType.QUALIFICATIONS, qualification);
+            put(SectionType.EXPERIENCE, experience);
+            put(SectionType.EDUCATION, education);
+        }};
     }
 }
