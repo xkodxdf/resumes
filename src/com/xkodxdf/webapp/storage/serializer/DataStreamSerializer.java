@@ -104,12 +104,13 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void writeTextSection(TextSection section, DataOutputStream dos) throws IOException {
-        writeSectionInfo(section, dos);
+        dos.writeUTF(section.getClass().getName());
         dos.writeUTF(section.getContent());
     }
 
     private void writeListSection(ListSection section, DataOutputStream dos) throws IOException {
-        writeSectionInfo(section, dos);
+        dos.writeUTF(section.getClass().getName());
+        dos.writeInt(section.getContent().size());
         for (String s : section.getContent()) {
             dos.writeUTF(s);
         }
@@ -125,7 +126,8 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void writeCompanySection(CompanySection section, DataOutputStream dos) throws Exception {
-        writeSectionInfo(section, dos);
+        dos.writeUTF(section.getClass().getName());
+        dos.writeInt(section.getContent().size());
         writeCompanies(section.getContent(), dos);
 
     }
@@ -173,14 +175,5 @@ public class DataStreamSerializer implements StreamSerializer {
         LocalDateAdapter adapter = new LocalDateAdapter();
         dos.writeUTF(adapter.marshal(startDate));
         dos.writeUTF(adapter.marshal(endDate));
-    }
-
-    private void writeSectionInfo(Section section, DataOutputStream dos) throws IOException {
-        dos.writeUTF(section.getClass().getName());
-        if (section instanceof ListSection) {
-            dos.writeInt(((ListSection) section).getContent().size());
-        } else if (section instanceof CompanySection) {
-            dos.writeInt(((CompanySection) section).getContent().size());
-        }
     }
 }
