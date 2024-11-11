@@ -72,18 +72,25 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private Map<SectionType, Section> readSections(int sectionsSize, DataInputStream dis) throws Exception {
-        SectionType type;
-        String sectionClassName;
+        SectionType sectionType;
         Map<SectionType, Section> ret = new HashMap<>();
         for (int i = 0; i < sectionsSize; i++) {
-            type = SectionType.valueOf(dis.readUTF());
-            sectionClassName = dis.readUTF();
-            if (TextSection.class.getName().equals(sectionClassName)) {
-                ret.put(type, new TextSection(dis.readUTF()));
-            } else if (ListSection.class.getName().equals(sectionClassName)) {
-                ret.put(type, new ListSection(readListSectionContent(dis)));
-            } else if (CompanySection.class.getName().equals(sectionClassName)) {
-                ret.put(type, new CompanySection(readCompanySectionContent(dis)));
+            sectionType = SectionType.valueOf(dis.readUTF());
+            switch (sectionType) {
+                case OBJECTIVE:
+                case PERSONAL:
+                    ret.put(sectionType, new TextSection(dis.readUTF()));
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    ret.put(sectionType, new ListSection(readListSectionContent(dis)));
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    ret.put(sectionType, new CompanySection(readCompanySectionContent(dis)));
+                    break;
+                default:
+                    throw new IOException("invalid section type: " + sectionType.name());
             }
         }
         return ret;
@@ -91,25 +98,33 @@ public class DataStreamSerializer implements StreamSerializer {
 
     private void writeSections(Map<SectionType, Section> sections, DataOutputStream dos) throws Exception {
         for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            dos.writeUTF(entry.getKey().name());
+            SectionType sectionType = entry.getKey();
+            dos.writeUTF(sectionType.name());
             Section section = entry.getValue();
-            if (section instanceof TextSection) {
-                writeTextSection((TextSection) section, dos);
-            } else if (section instanceof ListSection) {
-                writeListSection((ListSection) section, dos);
-            } else if (section instanceof CompanySection) {
-                writeCompanySection((CompanySection) section, dos);
+            switch (sectionType) {
+                case OBJECTIVE:
+                case PERSONAL:
+                    writeTextSection((TextSection) section, dos);
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    writeListSection((ListSection) section, dos);
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    writeCompanySection((CompanySection) section, dos);
+                    break;
+                default:
+                    throw new IOException("invalid section type: " + sectionType.name());
             }
         }
     }
 
     private void writeTextSection(TextSection section, DataOutputStream dos) throws IOException {
-        dos.writeUTF(section.getClass().getName());
         dos.writeUTF(section.getContent());
     }
 
     private void writeListSection(ListSection section, DataOutputStream dos) throws IOException {
-        dos.writeUTF(section.getClass().getName());
         dos.writeInt(section.getContent().size());
         for (String s : section.getContent()) {
             dos.writeUTF(s);
@@ -126,7 +141,6 @@ public class DataStreamSerializer implements StreamSerializer {
     }
 
     private void writeCompanySection(CompanySection section, DataOutputStream dos) throws Exception {
-        dos.writeUTF(section.getClass().getName());
         dos.writeInt(section.getContent().size());
         writeCompanies(section.getContent(), dos);
 
