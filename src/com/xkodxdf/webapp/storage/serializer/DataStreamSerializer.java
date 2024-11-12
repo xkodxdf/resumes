@@ -1,193 +1,148 @@
 package com.xkodxdf.webapp.storage.serializer;
 
 import com.xkodxdf.webapp.model.*;
-import com.xkodxdf.webapp.util.LocalDateAdapter;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
+
+    private interface Writer<T> {
+        void write(T element) throws IOException;
+    }
+
+    private interface Reader<T> {
+        T read() throws IOException;
+    }
+
+    private interface EntryReader<K, V> {
+        Map.Entry<K, V> read() throws IOException;
+    }
 
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
-            return readResume(dis);
+            String UUID = dis.readUTF();
+            String fullName = dis.readUTF();
+            Map<ContactType, String> contacts = readMap(dis.readInt(),
+                    () -> Map.entry(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            Map<SectionType, Section> sections = readMap(dis.readInt(), () -> readSection(dis));
+            return new Resume(UUID, fullName, contacts, sections);
         }
     }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
-            writeResume(r, dos);
+            dos.writeUTF(r.getUuid());
+            dos.writeUTF(r.getFullName());
+            writeContacts(r.getContacts(), dos);
+            writeSections(r.getSections(), dos);
         }
     }
 
-    private Resume readResume(DataInputStream dis) throws IOException {
-        String uuid = dis.readUTF();
-        String fullName = dis.readUTF();
-        int contactsSize = dis.readInt();
-        int sectionsSize = dis.readInt();
-        try {
-            return new Resume(uuid, fullName,
-                    readContacts(contactsSize, dis), readSections(sectionsSize, dis));
-        } catch (Exception e) {
-            throw new IOException(e);
+    private Map.Entry<SectionType, Section> readSection(DataInputStream dis) throws IOException {
+        SectionType sectionType = SectionType.valueOf(dis.readUTF());
+        switch (sectionType) {
+            case OBJECTIVE:
+            case PERSONAL:
+                return Map.entry(sectionType, new TextSection(dis.readUTF()));
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return Map.entry(sectionType, new ListSection(readList(dis.readInt(), dis::readUTF)));
+            case EXPERIENCE:
+            case EDUCATION:
+                return Map.entry(sectionType, readCompanySection(dis));
+            default:
+                throw new IOException("invalid section type: " + sectionType.name());
         }
     }
 
-    private void writeResume(Resume r, DataOutputStream dos) throws IOException {
-        dos.writeUTF(r.getUuid());
-        dos.writeUTF(r.getFullName());
-        try {
-            writeContent(r, dos);
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
-    }
-
-    private void writeContent(Resume r, DataOutputStream dos) throws Exception {
-        dos.writeInt(r.getContacts().size());
-        dos.writeInt(r.getSections().size());
-        writeContacts(r.getContacts(), dos);
-        writeSections(r.getSections(), dos);
-    }
-
-    private Map<ContactType, String> readContacts(int contactsSize, DataInputStream dis) throws IOException {
-        return new HashMap<>() {{
-            for (int i = 0; i < contactsSize; i++) {
-                put(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
-        }};
+    private CompanySection readCompanySection(DataInputStream dis) throws IOException {
+        return new CompanySection(readList(dis.readInt(),
+                () -> new Company(dis.readUTF(), dis.readUTF(), readList(dis.readInt(),
+                        () -> new Company.Period(dis.readUTF(), dis.readUTF(),
+                                LocalDate.parse(dis.readUTF()),
+                                LocalDate.parse(dis.readUTF()))))));
     }
 
     private void writeContacts(Map<ContactType, String> contacts, DataOutputStream dos) throws IOException {
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+        dos.writeInt(contacts.size());
+        writeCollection(contacts.entrySet(), entry -> {
             dos.writeUTF(entry.getKey().name());
             dos.writeUTF(entry.getValue());
+        });
+    }
+
+    private void writeSections(Map<SectionType, Section> sections, DataOutputStream dos) throws IOException {
+        dos.writeInt(sections.size());
+        writeCollection(sections.entrySet(), entry -> writeSection(entry, dos));
+    }
+
+    private void writeSection(Map.Entry<SectionType, Section> sectionEntry, DataOutputStream dos) throws IOException {
+        SectionType sectionType = sectionEntry.getKey();
+        Section section = sectionEntry.getValue();
+        dos.writeUTF(sectionType.name());
+        switch (sectionType) {
+            case OBJECTIVE:
+            case PERSONAL:
+                dos.writeUTF(((TextSection) section).getContent());
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                writeListSection(dos, (ListSection) section);
+                break;
+            case EXPERIENCE:
+            case EDUCATION:
+                writeCompanySection(dos, (CompanySection) section);
+                break;
+            default:
+                throw new IOException("Invalid section type: " + sectionType.name());
         }
     }
 
-    private Map<SectionType, Section> readSections(int sectionsSize, DataInputStream dis) throws Exception {
-        SectionType sectionType;
-        Map<SectionType, Section> ret = new HashMap<>();
-        for (int i = 0; i < sectionsSize; i++) {
-            sectionType = SectionType.valueOf(dis.readUTF());
-            switch (sectionType) {
-                case OBJECTIVE:
-                case PERSONAL:
-                    ret.put(sectionType, new TextSection(dis.readUTF()));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    ret.put(sectionType, new ListSection(readListSectionContent(dis)));
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-                    ret.put(sectionType, new CompanySection(readCompanySectionContent(dis)));
-                    break;
-                default:
-                    throw new IOException("invalid section type: " + sectionType.name());
-            }
-        }
-        return ret;
-    }
-
-    private void writeSections(Map<SectionType, Section> sections, DataOutputStream dos) throws Exception {
-        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            SectionType sectionType = entry.getKey();
-            dos.writeUTF(sectionType.name());
-            Section section = entry.getValue();
-            switch (sectionType) {
-                case OBJECTIVE:
-                case PERSONAL:
-                    writeTextSection((TextSection) section, dos);
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    writeListSection((ListSection) section, dos);
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-                    writeCompanySection((CompanySection) section, dos);
-                    break;
-                default:
-                    throw new IOException("invalid section type: " + sectionType.name());
-            }
-        }
-    }
-
-    private void writeTextSection(TextSection section, DataOutputStream dos) throws IOException {
-        dos.writeUTF(section.getContent());
-    }
-
-    private void writeListSection(ListSection section, DataOutputStream dos) throws IOException {
+    private void writeListSection(DataOutputStream dos, ListSection section) throws IOException {
         dos.writeInt(section.getContent().size());
-        for (String s : section.getContent()) {
-            dos.writeUTF(s);
+        writeCollection(section.getContent(), dos::writeUTF);
+    }
+
+    private void writeCompanySection(DataOutputStream dos, CompanySection section) throws IOException {
+        dos.writeInt(section.getContent().size());
+        writeCollection(section.getContent(), company -> {
+            dos.writeUTF(company.getHomePage().getName());
+            dos.writeUTF(company.getHomePage().getUrl());
+            writeCollection(company.getPeriods(), period -> {
+                dos.writeInt(company.getPeriods().size());
+                dos.writeUTF(period.getTitle());
+                dos.writeUTF(period.getDescription());
+                dos.writeUTF(period.getStartDate().toString());
+                dos.writeUTF(period.getEndDate().toString());
+            });
+        });
+    }
+
+    private <T> void writeCollection(Collection<T> collection, Writer<T> writer)
+            throws IOException {
+        for (T element : collection) {
+            writer.write(element);
         }
     }
 
-    private List<String> readListSectionContent(DataInputStream dis) throws IOException {
-        int size = dis.readInt();
+    private <T> List<T> readList(int size, Reader<T> reader) throws IOException {
         return new ArrayList<>() {{
             for (int i = 0; i < size; i++) {
-                add(dis.readUTF());
+                add(reader.read());
             }
         }};
     }
 
-    private void writeCompanySection(CompanySection section, DataOutputStream dos) throws Exception {
-        dos.writeInt(section.getContent().size());
-        writeCompanies(section.getContent(), dos);
-
-    }
-
-    private static List<Company> readCompanySectionContent(DataInputStream dis) throws Exception {
-        LocalDateAdapter adapter = new LocalDateAdapter();
-        List<Company.Period> periods = new ArrayList<>();
-        return new ArrayList<>() {{
-            int companiesSize = dis.readInt();
-            for (int i = 0; i < companiesSize; i++) {
-                Link homePage = new Link(dis.readUTF(), dis.readUTF());
-                int periodsSize = dis.readInt();
-                for (int p = 0; p < periodsSize; p++) {
-                    periods.add(new Company.Period(dis.readUTF(), dis.readUTF(),
-                            adapter.unmarshal(dis.readUTF()), adapter.unmarshal(dis.readUTF())));
-                }
-                add(new Company(homePage.getName(), homePage.getUrl(), new ArrayList<>(periods)));
-                periods.clear();
+    private <K, V> Map<K, V> readMap(int size, EntryReader<K, V> entryReader) throws IOException {
+        return new HashMap<>() {{
+            for (int i = 0; i < size; i++) {
+                Map.Entry<K, V> entry = entryReader.read();
+                put(entry.getKey(), entry.getValue());
             }
         }};
-    }
-
-    private void writeCompanies(List<Company> companies, DataOutputStream dos) throws Exception {
-        for (Company c : companies) {
-            writeCompanyHomePage(c.getHomePage(), dos);
-            writeCompanyPeriods(c.getPeriods(), dos);
-        }
-    }
-
-    private void writeCompanyHomePage(Link link, DataOutputStream dos) throws IOException {
-        dos.writeUTF(link.getName());
-        dos.writeUTF(link.getUrl());
-    }
-
-    private void writeCompanyPeriods(List<Company.Period> periods, DataOutputStream dos) throws Exception {
-        dos.writeInt(periods.size());
-        for (Company.Period p : periods) {
-            dos.writeUTF(p.getTitle());
-            dos.writeUTF(p.getDescription());
-            writePeriodDates(p.getStartDate(), p.getEndDate(), dos);
-        }
-    }
-
-    private void writePeriodDates(LocalDate startDate, LocalDate endDate, DataOutputStream dos) throws Exception {
-        LocalDateAdapter adapter = new LocalDateAdapter();
-        dos.writeUTF(adapter.marshal(startDate));
-        dos.writeUTF(adapter.marshal(endDate));
     }
 }
