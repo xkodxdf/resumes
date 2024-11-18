@@ -11,7 +11,6 @@ public class MainDeadlock {
         t2.start();
         t1.join();
         System.out.println("cant be print until t1 finish work");
-
     }
 
 
