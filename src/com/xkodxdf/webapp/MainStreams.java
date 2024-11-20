@@ -1,8 +1,9 @@
 package com.xkodxdf.webapp;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class MainStreams {
 
@@ -16,14 +17,10 @@ public class MainStreams {
     }
 
     private static int minValue(int[] values) {
-        int[] preparedValues = Arrays.stream(values)
+        return Arrays.stream(values)
                 .distinct()
                 .sorted()
-                .toArray();
-        int length = preparedValues.length;
-        return IntStream.range(0, length)
-                .map(i -> preparedValues[length - 1 - i] * (int) Math.pow(10, i))
-                .reduce(0, Integer::sum);
+                .reduce(0, (e1, e2) -> e1 * 10 + e2);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
