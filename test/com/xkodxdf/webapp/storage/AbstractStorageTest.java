@@ -1,5 +1,6 @@
 package com.xkodxdf.webapp.storage;
 
+import com.xkodxdf.webapp.Config;
 import com.xkodxdf.webapp.ResumeTestData;
 import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
@@ -14,7 +15,7 @@ import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
 
-    protected static final File STORAGE_DIR = new File(System.getProperty("user.dir") + "/file_storage");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     protected final Storage storage;
 
