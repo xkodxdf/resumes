@@ -59,6 +59,7 @@ public abstract class AbstractStorageTest {
 
     @Before
     public void setupStorage() {
+        storage.clear();
         storage.save(resume4);
         storage.save(resume2);
         storage.save(resume1);
