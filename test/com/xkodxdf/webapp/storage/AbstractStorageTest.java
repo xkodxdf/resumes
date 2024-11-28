@@ -9,7 +9,9 @@ import org.junit.*;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -19,14 +21,14 @@ public abstract class AbstractStorageTest {
 
     protected final Storage storage;
 
-    protected static final String UUID_1 = "uuid1";
+    protected static final String UUID_1 = UUID.randomUUID().toString();
     protected static final String NAME_1 = "dummy1";
-    protected static final String UUID_2 = "uuid2";
+    protected static final String UUID_2 = UUID.randomUUID().toString();
     protected static final String NAME_2 = "dummy2";
-    protected static final String UUID_3 = "uuid3";
+    protected static final String UUID_3 = UUID.randomUUID().toString();
     protected static final String NAME_3 = "dummy3";
-    protected static final String UUID_4 = "uuid4";
-    protected static final String NOT_EXISTING_RESUME = "abracadabra";
+    protected static final String UUID_4 = UUID.randomUUID().toString();
+    protected static final String NOT_EXISTING_RESUME_UUID = UUID.randomUUID().toString();
     protected static final String NAME_5 = "dummycadabra";
 
     protected static final Resume resume1;
@@ -40,7 +42,7 @@ public abstract class AbstractStorageTest {
         resume2 = ResumeTestData.getTestResume(UUID_2, NAME_2);
         resume3 = ResumeTestData.getTestResume(UUID_3, NAME_3);
         resume4 = ResumeTestData.getTestResume(UUID_4, NAME_3);
-        notExistingResume = ResumeTestData.getTestResume(NOT_EXISTING_RESUME, NAME_5);
+        notExistingResume = ResumeTestData.getTestResume(NOT_EXISTING_RESUME_UUID, NAME_5);
     }
 
     public AbstractStorageTest(Storage storage) {
@@ -99,7 +101,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExistingResume() {
-        storage.get(NOT_EXISTING_RESUME);
+        storage.get(NOT_EXISTING_RESUME_UUID);
     }
 
     @Test
@@ -129,7 +131,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExistingResume() {
-        storage.delete(NOT_EXISTING_RESUME);
+        storage.delete(NOT_EXISTING_RESUME_UUID);
     }
 
     @Test
