@@ -1,14 +1,12 @@
 package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.Config;
-import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.Resume;
 import com.xkodxdf.webapp.sql.SqlHelper;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +31,7 @@ public class SqlStorage implements Storage {
         sqlHelper.exucuteStatement("INSERT INTO resume (uuid, full_name) VALUES(?,?)", ps -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            String duplicateErrCode = "23505";
-            try {
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                if (e.getSQLState().equals(duplicateErrCode)) {
-                    throw new ExistStorageException(r.getUuid());
-                }
-                throw new SQLException(e);
-            }
+            ps.executeUpdate();
             return null;
         });
     }

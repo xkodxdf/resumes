@@ -21,9 +21,11 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(query)) {
             return ex.execute(ps);
         } catch (SQLException e) {
+            String duplicateErrCode = "23505";
+            if (e.getSQLState().equals(duplicateErrCode)) {
+                throw new ExistStorageException(null);
+            }
             throw new StorageException(e);
-        } catch (ExistStorageException e) {
-            throw new ExistStorageException(e.getUuid());
         }
     }
 }
