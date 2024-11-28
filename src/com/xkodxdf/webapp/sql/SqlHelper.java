@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SqlHelper {
 
@@ -23,9 +25,18 @@ public class SqlHelper {
         } catch (SQLException e) {
             String duplicateErrCode = "23505";
             if (e.getSQLState().equals(duplicateErrCode)) {
-                throw new ExistStorageException(null);
+                throw new ExistStorageException(extractUUID(e.getMessage()));
             }
             throw new StorageException(e);
         }
+    }
+
+    private static String extractUUID(String errorMessage) {
+        Pattern pattern = Pattern.compile("\\(uuid\\)=\\(([^)]+)\\)");
+        Matcher matcher = pattern.matcher(errorMessage);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
 }
