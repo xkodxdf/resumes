@@ -1,5 +1,8 @@
 package com.xkodxdf.webapp;
 
+import com.xkodxdf.webapp.storage.SqlStorage;
+import com.xkodxdf.webapp.storage.Storage;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,9 +15,7 @@ public class Config {
     private static final Config INSTANCE = new Config();
 
     private final File storageDir;
-    private final String dbUrl;
-    private final String dbUsr;
-    private final String dbPwd;
+    private final Storage sqlStorage;
 
     public static Config get() {
         return INSTANCE;
@@ -25,27 +26,18 @@ public class Config {
             Properties props = new Properties();
             props.load(is);
             storageDir = new File(System.getProperty("user.dir") + props.getProperty("storage.dir"));
-            dbUrl = props.getProperty("db.url");
-            dbUsr = props.getProperty("db.user");
-            dbPwd = props.getProperty(("db.password"));
+            sqlStorage = new SqlStorage(props.getProperty("db.url"), props.getProperty("db.user"),
+                    props.getProperty("db.password"));
         } catch (IOException e) {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }
     }
 
+    public Storage getSqlStorage() {
+        return sqlStorage;
+    }
+
     public File getStorageDir() {
         return storageDir;
-    }
-
-    public String getDbUrl() {
-        return dbUrl;
-    }
-
-    public String getDbUsr() {
-        return dbUsr;
-    }
-
-    public String getDbPwd() {
-        return dbPwd;
     }
 }

@@ -1,10 +1,10 @@
 package com.xkodxdf.webapp.storage;
 
-import com.xkodxdf.webapp.Config;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.Resume;
 import com.xkodxdf.webapp.sql.SqlHelper;
 
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -14,8 +14,8 @@ public class SqlStorage implements Storage {
 
     private final SqlHelper sqlHelper;
 
-    public SqlStorage() {
-        this.sqlHelper = new SqlHelper(Config.get().getDbUrl(), Config.get().getDbUsr(), Config.get().getDbPwd());
+    public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        this.sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SqlStorage implements Storage {
         sqlHelper.exucuteStatement("INSERT INTO resume (uuid, full_name) VALUES(?,?)", ps -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            ps.executeUpdate();
+            ps.execute();
             return null;
         });
     }

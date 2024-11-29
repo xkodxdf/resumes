@@ -4,7 +4,6 @@ import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.StorageException;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
@@ -14,8 +13,8 @@ public class SqlHelper {
 
     private final ConnectionFactory connectionFactory;
 
-    public SqlHelper(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+    public SqlHelper(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     public <T> T exucuteStatement(String query, SqlExecutor<T> ex) {

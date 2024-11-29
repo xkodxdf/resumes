@@ -1,8 +1,10 @@
 package com.xkodxdf.webapp.storage;
 
+import com.xkodxdf.webapp.Config;
+
 public class SqlStorageTest extends AbstractStorageTest {
 
     public SqlStorageTest() {
-        super(new SqlStorage());
+        super(Config.get().getSqlStorage());
     }
 }
