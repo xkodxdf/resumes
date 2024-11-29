@@ -1,13 +1,10 @@
 package com.xkodxdf.webapp.sql;
 
-import com.xkodxdf.webapp.exception.ExistStorageException;
 import com.xkodxdf.webapp.exception.StorageException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SqlHelper {
 
@@ -17,25 +14,28 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T exucuteStatement(String query, SqlExecutor<T> ex) {
+    public <T> T executeStatement(String query, SqlExecutor<T> ex) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             return ex.execute(ps);
         } catch (SQLException e) {
-            String duplicateErrCode = "23505";
-            if (e.getSQLState().equals(duplicateErrCode)) {
-                throw new ExistStorageException(extractUUID(e.getMessage()));
-            }
-            throw new StorageException(e);
+            throw ExceptionUtil.convertException(e);
         }
     }
 
-    private static String extractUUID(String errorMessage) {
-        Pattern pattern = Pattern.compile("\\(uuid\\)=\\(([^)]+)\\)");
-        Matcher matcher = pattern.matcher(errorMessage);
-        if (matcher.find()) {
-            return matcher.group(1);
+    public <T> T executeTransaction(SqlTransaction<T> ex) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T ret = ex.execute(conn);
+                conn.commit();
+                return ret;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw ExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
         }
-        return null;
     }
 }
