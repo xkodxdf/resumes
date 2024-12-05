@@ -7,7 +7,7 @@ import com.xkodxdf.webapp.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -106,16 +106,16 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.executeTransaction(conn -> {
-            List<Resume> ret = new ArrayList<>();
+            Map<String, Resume> ret = new LinkedHashMap<>();
             try (Statement statement = conn.createStatement();
                  ResultSet rs = statement.executeQuery(
                          "SELECT * FROM resume " +
                                  "ORDER BY full_name, uuid")) {
                 while (rs.next()) {
-                    ret.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
+                    ret.put(rs.getString("uuid"),
+                            new Resume(rs.getString("uuid"), rs.getString("full_name")));
                 }
             }
-            Map<String, Map<ContactType, String>> allContacts = new HashMap<>();
             try (Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
                  ResultSet rs = statement.executeQuery(
@@ -123,21 +123,18 @@ public class SqlStorage implements Storage {
                                  "ORDER BY resume_uuid")) {
                 while (rs.next()) {
                     String currentUuid = rs.getString("resume_uuid");
-                    Map<ContactType, String> currentUuidContacts = new HashMap<>();
+                    Resume resume = ret.get(currentUuid);
+                    if (resume == null) {
+                        continue;
+                    }
                     do {
-                        currentUuidContacts.put(ContactType.valueOf(rs.getString("type")),
+                        resume.addContact(ContactType.valueOf(rs.getString("type")),
                                 rs.getString("value"));
                     } while (rs.next() && currentUuid.equals(rs.getString("resume_uuid")));
                     rs.previous();
-                    allContacts.put(currentUuid, currentUuidContacts);
                 }
             }
-            ret = ret.stream().peek(r -> {
-                for (Map.Entry<ContactType, String> c : allContacts.get(r.getUuid()).entrySet()) {
-                    r.addContact(c.getKey(), c.getValue());
-                }
-            }).collect(Collectors.toList());
-            return ret;
+            return new ArrayList<>(ret.values());
         });
     }
 
