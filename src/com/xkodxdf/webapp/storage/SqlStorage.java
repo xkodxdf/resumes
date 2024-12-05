@@ -60,7 +60,15 @@ public class SqlStorage implements Storage {
                         if (!rs.next()) {
                             throw new NotExistStorageException(uuid);
                         }
-                        return getResume(rs, uuid);
+                        Resume ret = new Resume(uuid, rs.getString("full_name"));
+                        do {
+                            String type = rs.getString("type");
+                            String value = rs.getString("value");
+                            if (!(type == null || value == null)) {
+                                ret.addContact(ContactType.valueOf(type), value);
+                            }
+                        } while (rs.next());
+                        return ret;
                     }
                 });
     }
@@ -136,16 +144,6 @@ public class SqlStorage implements Storage {
     @Override
     public void clear() {
         sqlHelper.executeStatement("DELETE FROM resume", PreparedStatement::execute);
-    }
-
-    private Resume getResume(ResultSet rs, String uuid) throws SQLException {
-        Resume ret = new Resume(uuid, rs.getString("full_name"));
-        do {
-            ContactType type = ContactType.valueOf(rs.getString("type"));
-            String value = rs.getString("value");
-            ret.addContact(type, value);
-        } while (rs.next());
-        return ret;
     }
 
     private void prepareStatement(PreparedStatement ps, String... params) throws SQLException {
