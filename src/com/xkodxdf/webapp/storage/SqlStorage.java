@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
 
@@ -40,8 +39,7 @@ public class SqlStorage implements Storage {
                         prepareStatement(ps, r.getUuid(), r.getFullName());
                         ps.execute();
                     }
-                    saveOrUpdateContacts(conn, r, "INSERT INTO contact (resume_uuid, type, value) " +
-                            "VALUES (?,?,?)");
+            insertContacts(conn, r);
                     return null;
                 }
         );
@@ -85,7 +83,11 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(r.getUuid());
                 }
             }
-            saveOrUpdateContacts(conn, r, "UPDATE contact SET value=? WHERE resume_uuid=? AND type=?");
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid=?")) {
+                ps.setString(1, r.getUuid());
+                ps.execute();
+            }
+            insertContacts(conn, r);
             return null;
         });
     }
@@ -149,17 +151,18 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void saveOrUpdateContacts(Connection conn, Resume r, String query) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            for (Map.Entry<ContactType, String> contacts : r.getContacts().entrySet()) {
-                if (query.startsWith("INSERT")) {
+    private void insertContacts(Connection conn, Resume r) {
+        sqlHelper.executeTransaction(connection -> {
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO contact (resume_uuid, type, value) " +
+                            "VALUES (?,?,?)")) {
+                for (Map.Entry<ContactType, String> contacts : r.getContacts().entrySet()) {
                     prepareStatement(ps, r.getUuid(), contacts.getKey().name(), contacts.getValue());
-                } else {
-                    prepareStatement(ps, contacts.getValue(), r.getUuid(), contacts.getKey().name());
+                    ps.addBatch();
                 }
-                ps.addBatch();
+                ps.executeBatch();
             }
-            ps.executeBatch();
-        }
+            return null;
+        });
     }
 }
