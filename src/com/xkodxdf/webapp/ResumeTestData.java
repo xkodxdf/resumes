@@ -18,7 +18,7 @@ public class ResumeTestData {
     }
 
     public static Resume getTestResume(String uuid, String fullName) {
-        return new Resume(uuid, fullName, generateContacts()/*, generateSections()*/);
+        return new Resume(uuid, fullName, generateContacts(), generateSections());
     }
 
     private static void printResume(Resume resume) {
@@ -40,26 +40,26 @@ public class ResumeTestData {
     }
 
     private static Map<SectionType, Section> generateSections() {
-        TextSection objective = new TextSection(
+        TextSection objective = new TextSection((int) (Math.random() * 10_000) +
                 "Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям..."
         );
 
-        TextSection personal = new TextSection(
+        TextSection personal = new TextSection((int) (Math.random() * 10_000) +
                 "Аналитический склад ума, сильная логика, креативность, инициативность." +
-                        "Пурист кода и архитектуры..."
+                "Пурист кода и архитектуры..."
         );
 
         ListSection achievements = new ListSection(
-                Arrays.asList(
-                        "Организация команды и успешная реализация Java проектов для сторонних заказчиков...",
+                Arrays.asList((int) (Math.random() * 10_000) +
+                                "Организация команды и успешная реализация Java проектов для сторонних заказчиков...",
                         "С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\"...",
                         "Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike..."
                 )
         );
 
         ListSection qualification = new ListSection(
-                Arrays.asList(
-                        "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2...",
+                Arrays.asList((int) (Math.random() * 10_000) +
+                                "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2...",
                         "Version control: Subversion, Git, Mercury, ClearCase, Perforce...",
                         "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, MySQL, SQLite," +
                                 "MS SQL, HSQLDB..."
@@ -111,8 +111,8 @@ public class ResumeTestData {
             put(SectionType.PERSONAL, personal);
             put(SectionType.ACHIEVEMENT, achievements);
             put(SectionType.QUALIFICATIONS, qualification);
-            put(SectionType.EXPERIENCE, experience);
-            put(SectionType.EDUCATION, education);
+//            put(SectionType.EXPERIENCE, experience);
+//            put(SectionType.EDUCATION, education);
         }};
     }
 }
