@@ -143,23 +143,17 @@ public class SqlStorage implements Storage {
                     ret.put(uuid, new Resume(uuid, rs.getString("full_name")));
                 }
             }
-            try (Statement statement = conn.createStatement();
-                 ResultSet rs = statement.executeQuery(
-                         "SELECT resume_uuid, type, value FROM contact " +
-                                 "ORDER BY resume_uuid")) {
-                String uuid;
-                String currentUuid = null;
-                Resume resume = null;
-                while (rs.next()) {
-                    uuid = rs.getString("resume_uuid");
-                    if (!Objects.equals(uuid, currentUuid)) {
-                        currentUuid = uuid;
-                        resume = ret.get(currentUuid);
-                    }
-                    resume.addContact(ContactType.valueOf(rs.getString("type")),
-                            rs.getString("value"));
-                }
-            }
+            attachResumesData(ret, conn,
+                    "SELECT resume_uuid, type, value " +
+                            "FROM contact " +
+                            "ORDER BY resume_uuid",
+                    (r, rs) -> r.addContact(ContactType.valueOf(rs.getString("type")),
+                            rs.getString("value")));
+            attachResumesData(ret, conn,
+                    "SELECT resume_uuid, type, value " +
+                            "FROM section " +
+                            "ORDER BY resume_uuid",
+                    this::addSection);
             return new ArrayList<>(ret.values());
         });
     }
@@ -200,6 +194,25 @@ public class SqlStorage implements Storage {
             ps.executeBatch();
         }
     }
+
+    private void attachResumesData(Map<String, Resume> resumes, Connection conn, String query,
+                                   ResumesDataHandler resumesDataHandler) throws SQLException {
+        try (Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(query)) {
+            String uuid;
+            String currentUuid = null;
+            Resume resume = null;
+            while (rs.next()) {
+                uuid = rs.getString("resume_uuid");
+                if (!Objects.equals(uuid, currentUuid)) {
+                    currentUuid = uuid;
+                    resume = resumes.get(currentUuid);
+                }
+                resumesDataHandler.attach(resume, rs);
+            }
+        }
+    }
+
     private void addSection(Resume resume, ResultSet resultSet) throws SQLException {
         String typeName;
         SectionType type;
