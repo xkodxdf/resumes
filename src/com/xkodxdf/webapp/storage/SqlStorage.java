@@ -49,7 +49,7 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.executeTransaction(conn -> {
-            Resume ret;
+            Resume resume;
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT * FROM resume r " +
                             "LEFT JOIN contact c " +
@@ -60,12 +60,12 @@ public class SqlStorage implements Storage {
                     if (!rs.next()) {
                         throw new NotExistStorageException(uuid);
                     }
-                    ret = new Resume(uuid, rs.getString("full_name"));
+                    resume = new Resume(uuid, rs.getString("full_name"));
                     String contactType;
                     do {
                         contactType = rs.getString("type");
                         if (contactType != null) {
-                            ret.addContact(ContactType.valueOf(contactType), rs.getString("value"));
+                            resume.addContact(ContactType.valueOf(contactType), rs.getString("value"));
                         }
                     } while (rs.next());
                 }
@@ -76,14 +76,14 @@ public class SqlStorage implements Storage {
                 ps.setString(1, uuid);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
-                        return ret;
+                        return resume;
                     }
                     do {
-                        addSection(ret, rs);
+                        addSection(resume, rs);
                     } while (rs.next());
                 }
             }
-            return ret;
+            return resume;
         });
     }
 
@@ -133,7 +133,7 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.executeTransaction(conn -> {
-            Map<String, Resume> ret = new LinkedHashMap<>();
+            Map<String, Resume> resumes = new LinkedHashMap<>();
             try (Statement statement = conn.createStatement();
                  ResultSet rs = statement.executeQuery(
                          "SELECT * FROM resume " +
@@ -141,12 +141,12 @@ public class SqlStorage implements Storage {
                 String uuid;
                 while (rs.next()) {
                     uuid = rs.getString("uuid");
-                    ret.put(uuid, new Resume(uuid, rs.getString("full_name")));
+                    resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
                 }
             }
-            attachContacts(ret, conn);
-            attachSections(ret, conn);
-            return new ArrayList<>(ret.values());
+            attachContacts(resumes, conn);
+            attachSections(resumes, conn);
+            return new ArrayList<>(resumes.values());
         });
     }
 
