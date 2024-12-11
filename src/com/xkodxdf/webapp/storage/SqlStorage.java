@@ -144,8 +144,8 @@ public class SqlStorage implements Storage {
                     resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
                 }
             }
-            attachContacts(resumes, conn);
-            attachSections(resumes, conn);
+            addContacts(resumes, conn);
+            addSections(resumes, conn);
             return new ArrayList<>(resumes.values());
         });
     }
@@ -195,7 +195,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void attachContacts(Map<String, Resume> resumes, Connection conn) throws SQLException {
+    private void addContacts(Map<String, Resume> resumes, Connection conn) throws SQLException {
         try (Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(
                      "SELECT resume_uuid, type, value " +
@@ -216,7 +216,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void attachSections(Map<String, Resume> resumes, Connection conn) throws SQLException {
+    private void addSections(Map<String, Resume> resumes, Connection conn) throws SQLException {
         try (Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(
                      "SELECT resume_uuid, type, value " +
