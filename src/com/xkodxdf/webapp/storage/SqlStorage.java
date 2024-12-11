@@ -174,15 +174,20 @@ public class SqlStorage implements Storage {
                 "INSERT INTO section (resume_uuid, type, value) " +
                         "VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, Section> sections : r.getSections().entrySet()) {
-                if (sections.getValue() instanceof TextSection) {
-                    ps.setString(1, r.getUuid());
-                    ps.setString(2, sections.getKey().name());
-                    ps.setString(3, sections.getValue().toString());
-                } else {
-                    ps.setString(1, r.getUuid());
-                    ps.setString(2, sections.getKey().name());
-                    ps.setString(3, String.join("\n",
-                            ((ListSection) sections.getValue()).getContent()));
+                SectionType sectionType = sections.getKey();
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        ps.setString(1, r.getUuid());
+                        ps.setString(2, sections.getKey().name());
+                        ps.setString(3, sections.getValue().toString());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ps.setString(1, r.getUuid());
+                        ps.setString(2, sections.getKey().name());
+                        ps.setString(3, String.join("\n",
+                                ((ListSection) sections.getValue()).getContent()));
                 }
                 ps.addBatch();
             }
