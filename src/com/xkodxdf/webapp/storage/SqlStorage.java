@@ -237,12 +237,9 @@ public class SqlStorage implements Storage {
     }
 
     private void addSection(Resume resume, ResultSet resultSet) throws SQLException {
-        String typeName;
-        SectionType type;
-        typeName = resultSet.getString("type");
-        List<String> content;
+        String typeName = resultSet.getString("type");
         if (typeName != null) {
-            type = SectionType.valueOf(typeName);
+            SectionType type = SectionType.valueOf(typeName);
             switch (type) {
                 case OBJECTIVE:
                 case PERSONAL:
@@ -250,7 +247,7 @@ public class SqlStorage implements Storage {
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    content = Arrays.asList(resultSet.getString("value").split("\n"));
+                    List<String> content = Arrays.asList(resultSet.getString("value").split("\n"));
                     resume.addSection(type, new ListSection(content));
             }
         }
