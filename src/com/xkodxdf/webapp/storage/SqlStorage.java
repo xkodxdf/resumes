@@ -2,7 +2,6 @@ package com.xkodxdf.webapp.storage;
 
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.*;
-import com.xkodxdf.webapp.sql.ResumesDataHandler;
 import com.xkodxdf.webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -145,17 +144,8 @@ public class SqlStorage implements Storage {
                     ret.put(uuid, new Resume(uuid, rs.getString("full_name")));
                 }
             }
-            attachResumesData(ret, conn,
-                    "SELECT resume_uuid, type, value " +
-                            "FROM contact " +
-                            "ORDER BY resume_uuid",
-                    (r, rs) -> r.addContact(ContactType.valueOf(rs.getString("type")),
-                            rs.getString("value")));
-            attachResumesData(ret, conn,
-                    "SELECT resume_uuid, type, value " +
-                            "FROM section " +
-                            "ORDER BY resume_uuid",
-                    this::addSection);
+            attachContacts(ret, conn);
+            attachSections(ret, conn);
             return new ArrayList<>(ret.values());
         });
     }
@@ -200,10 +190,12 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void attachResumesData(Map<String, Resume> resumes, Connection conn, String query,
-                                   ResumesDataHandler resumesDataHandler) throws SQLException {
+    private void attachContacts(Map<String, Resume> resumes, Connection conn) throws SQLException {
         try (Statement statement = conn.createStatement();
-             ResultSet rs = statement.executeQuery(query)) {
+             ResultSet rs = statement.executeQuery(
+                     "SELECT resume_uuid, type, value " +
+                             "FROM contact " +
+                             "ORDER BY resume_uuid")) {
             String uuid;
             String currentUuid = null;
             Resume resume = null;
@@ -213,7 +205,28 @@ public class SqlStorage implements Storage {
                     currentUuid = uuid;
                     resume = resumes.get(currentUuid);
                 }
-                resumesDataHandler.attach(resume, rs);
+                resume.addContact(ContactType.valueOf(rs.getString("type")),
+                        rs.getString("value"));
+            }
+        }
+    }
+
+    private void attachSections(Map<String, Resume> resumes, Connection conn) throws SQLException {
+        try (Statement statement = conn.createStatement();
+             ResultSet rs = statement.executeQuery(
+                     "SELECT resume_uuid, type, value " +
+                             "FROM section " +
+                             "ORDER BY resume_uuid")) {
+            String uuid;
+            String currentUuid = null;
+            Resume resume = null;
+            while (rs.next()) {
+                uuid = rs.getString("resume_uuid");
+                if (!Objects.equals(uuid, currentUuid)) {
+                    currentUuid = uuid;
+                    resume = resumes.get(currentUuid);
+                }
+                addSection(resume, rs);
             }
         }
     }
