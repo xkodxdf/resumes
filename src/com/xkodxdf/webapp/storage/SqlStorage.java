@@ -41,7 +41,8 @@ public class SqlStorage implements Storage {
                 prepareStatement(ps, r.getUuid(), r.getFullName());
                 ps.execute();
             }
-            insertContactsSections(r, conn);
+            insertContacts(r, conn);
+            insertSections(r, conn);
             return null;
         });
     }
@@ -111,7 +112,8 @@ public class SqlStorage implements Storage {
                 ps.setString(1, r.getUuid());
                 ps.execute();
             }
-            insertContactsSections(r, conn);
+            insertContacts(r, conn);
+            insertSections(r, conn);
             return null;
         });
     }
@@ -169,7 +171,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertContactsSections(Resume r, Connection conn) throws SQLException {
+    private void insertSections(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO contact (resume_uuid, type, value) " +
                         "VALUES(?,?,?)")) {
@@ -179,6 +181,9 @@ public class SqlStorage implements Storage {
             }
             ps.executeBatch();
         }
+    }
+
+    private void insertContacts(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO section (resume_uuid, type, value) " +
                         "VALUES (?,?,?)")) {
