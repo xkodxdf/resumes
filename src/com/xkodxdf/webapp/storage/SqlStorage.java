@@ -155,7 +155,7 @@ public class SqlStorage implements Storage {
         sqlHelper.executeStatement("DELETE FROM resume", PreparedStatement::execute);
     }
 
-    private void insertSections(Resume r, Connection conn) throws SQLException {
+    private void insertContacts(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO contact (resume_uuid, type, value) " +
                         "VALUES(?,?,?)")) {
@@ -169,7 +169,7 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void insertContacts(Resume r, Connection conn) throws SQLException {
+    private void insertSections(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO section (resume_uuid, type, value) " +
                         "VALUES (?,?,?)")) {
