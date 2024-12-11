@@ -25,9 +25,8 @@ public class SqlStorage implements Storage {
         return sqlHelper.executeStatement(
                 "SELECT count(*) " +
                         "FROM resume", ps -> {
-                    try (ResultSet rs = ps.executeQuery()) {
-                        return rs.next() ? rs.getInt(1) : 0;
-                    }
+                    ResultSet rs = ps.executeQuery();
+                    return rs.next() ? rs.getInt(1) : 0;
                 });
     }
 
@@ -56,32 +55,30 @@ public class SqlStorage implements Storage {
                             "ON r.uuid = c.resume_uuid " +
                             "WHERE r.uuid =?")) {
                 ps.setString(1, uuid);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) {
-                        throw new NotExistStorageException(uuid);
-                    }
-                    resume = new Resume(uuid, rs.getString("full_name"));
-                    String contactType;
-                    do {
-                        contactType = rs.getString("type");
-                        if (contactType != null) {
-                            resume.addContact(ContactType.valueOf(contactType), rs.getString("value"));
-                        }
-                    } while (rs.next());
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    throw new NotExistStorageException(uuid);
                 }
+                resume = new Resume(uuid, rs.getString("full_name"));
+                String contactType;
+                do {
+                    contactType = rs.getString("type");
+                    if (contactType != null) {
+                        resume.addContact(ContactType.valueOf(contactType), rs.getString("value"));
+                    }
+                } while (rs.next());
             }
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT type, value FROM section " +
                             "WHERE resume_uuid =?")) {
                 ps.setString(1, uuid);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) {
-                        return resume;
-                    }
-                    do {
-                        addSection(resume, rs);
-                    } while (rs.next());
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    return resume;
                 }
+                do {
+                    addSection(resume, rs);
+                } while (rs.next());
             }
             return resume;
         });
