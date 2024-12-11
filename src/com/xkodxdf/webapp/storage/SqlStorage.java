@@ -36,7 +36,8 @@ public class SqlStorage implements Storage {
             try (PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO resume (uuid, full_name) " +
                             "VALUES (?,?)")) {
-                prepareStatement(ps, r.getUuid(), r.getFullName());
+                ps.setString(1, r.getUuid());
+                ps.setString(2, r.getFullName());
                 ps.execute();
             }
             insertContacts(r, conn);
@@ -92,7 +93,8 @@ public class SqlStorage implements Storage {
                     "UPDATE resume " +
                             "SET full_name=? " +
                             "WHERE uuid=?")) {
-                prepareStatement(ps, r.getFullName(), r.getUuid());
+                ps.setString(1, r.getFullName());
+                ps.setString(2, r.getUuid());
                 if (ps.executeUpdate() == 0) {
                     throw new NotExistStorageException(r.getUuid());
                 }
@@ -153,18 +155,14 @@ public class SqlStorage implements Storage {
         sqlHelper.executeStatement("DELETE FROM resume", PreparedStatement::execute);
     }
 
-    private void prepareStatement(PreparedStatement ps, String... params) throws SQLException {
-        for (int i = 1; i <= params.length; i++) {
-            ps.setString(i, params[i - 1]);
-        }
-    }
-
     private void insertSections(Resume r, Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO contact (resume_uuid, type, value) " +
                         "VALUES(?,?,?)")) {
             for (Map.Entry<ContactType, String> contacts : r.getContacts().entrySet()) {
-                prepareStatement(ps, r.getUuid(), contacts.getKey().name(), contacts.getValue());
+                ps.setString(1, r.getUuid());
+                ps.setString(2, contacts.getKey().name());
+                ps.setString(3, contacts.getValue());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -177,10 +175,14 @@ public class SqlStorage implements Storage {
                         "VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, Section> sections : r.getSections().entrySet()) {
                 if (sections.getValue() instanceof TextSection) {
-                    prepareStatement(ps, r.getUuid(), sections.getKey().name(), sections.getValue().toString());
+                    ps.setString(1, r.getUuid());
+                    ps.setString(2, sections.getKey().name());
+                    ps.setString(3, sections.getValue().toString());
                 } else {
-                    prepareStatement(ps, r.getUuid(), sections.getKey().name(),
-                            String.join("\n", ((ListSection) sections.getValue()).getContent()));
+                    ps.setString(1, r.getUuid());
+                    ps.setString(2, sections.getKey().name());
+                    ps.setString(3, String.join("\n",
+                            ((ListSection) sections.getValue()).getContent()));
                 }
                 ps.addBatch();
             }
