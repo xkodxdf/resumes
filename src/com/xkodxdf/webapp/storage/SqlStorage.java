@@ -201,11 +201,10 @@ public class SqlStorage implements Storage {
                      "SELECT resume_uuid, type, value " +
                              "FROM contact " +
                              "ORDER BY resume_uuid")) {
-            String uuid;
             String currentUuid = null;
             Resume resume = null;
             while (rs.next()) {
-                uuid = rs.getString("resume_uuid");
+                String uuid = rs.getString("resume_uuid");
                 if (!Objects.equals(uuid, currentUuid)) {
                     currentUuid = uuid;
                     resume = resumes.get(currentUuid);
@@ -222,11 +221,10 @@ public class SqlStorage implements Storage {
                      "SELECT resume_uuid, type, value " +
                              "FROM section " +
                              "ORDER BY resume_uuid")) {
-            String uuid;
             String currentUuid = null;
             Resume resume = null;
             while (rs.next()) {
-                uuid = rs.getString("resume_uuid");
+                String uuid = rs.getString("resume_uuid");
                 if (!Objects.equals(uuid, currentUuid)) {
                     currentUuid = uuid;
                     resume = resumes.get(currentUuid);
