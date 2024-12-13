@@ -175,17 +175,15 @@ public class SqlStorage implements Storage {
                         "VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, Section> sections : r.getSections().entrySet()) {
                 SectionType sectionType = sections.getKey();
+                ps.setString(1, r.getUuid());
+                ps.setString(2, sections.getKey().name());
                 switch (sectionType) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        ps.setString(1, r.getUuid());
-                        ps.setString(2, sections.getKey().name());
                         ps.setString(3, sections.getValue().toString());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        ps.setString(1, r.getUuid());
-                        ps.setString(2, sections.getKey().name());
                         ps.setString(3, String.join("\n",
                                 ((ListSection) sections.getValue()).getContent()));
                 }
