@@ -2,7 +2,24 @@ package com.xkodxdf.webapp.model;
 
 public enum ContactType {
 
-    PHONE("Телефон"),
+    PHONE("Тел.") {
+        @Override
+        protected String toHtml0(String value) {
+            return getTitle() + ": " + toLink("tel:" + value, value);
+        }
+    },
+    MOBILE("Мобильный") {
+        @Override
+        protected String toHtml0(String value) {
+            return getTitle() + ": " + toLink("tel:" + value, value);
+        }
+    },
+    HOME_PHONE("Домашний тел.") {
+        @Override
+        protected String toHtml0(String value) {
+            return getTitle() + ": " + toLink("tel:" + value, value);
+        }
+    },
     SKYPE("Skype") {
         @Override
         protected String toHtml0(String value) {

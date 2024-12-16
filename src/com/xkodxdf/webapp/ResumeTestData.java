@@ -30,6 +30,9 @@ public class ResumeTestData {
 
     private static Map<ContactType, String> generateContacts() {
         return new EnumMap<>(ContactType.class) {{
+            put(ContactType.PHONE, (int) (Math.random() * 10_000) + "33-12-10");
+            put(ContactType.MOBILE, (int) (Math.random() * 10_000) + "8-800-555-35-35");
+            put(ContactType.HOME_PHONE, (int) (Math.random() * 10_000) + "73-25-01");
             put(ContactType.SKYPE, (int) (Math.random() * 10_000) + "@example111");
             put(ContactType.EMAIL, (int) (Math.random() * 10_000) + "example@example.com");
             put(ContactType.LINKEDIN, (int) (Math.random() * 10_000) + "linked.in/example");
