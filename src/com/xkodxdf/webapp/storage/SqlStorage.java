@@ -3,6 +3,7 @@ package com.xkodxdf.webapp.storage;
 import com.xkodxdf.webapp.exception.NotExistStorageException;
 import com.xkodxdf.webapp.model.*;
 import com.xkodxdf.webapp.sql.SqlHelper;
+import com.xkodxdf.webapp.util.JsonParser;
 
 import java.sql.*;
 import java.util.*;
@@ -177,16 +178,7 @@ public class SqlStorage implements Storage {
                 SectionType sectionType = sections.getKey();
                 ps.setString(1, r.getUuid());
                 ps.setString(2, sections.getKey().name());
-                switch (sectionType) {
-                    case OBJECTIVE:
-                    case PERSONAL:
-                        ps.setString(3, ((TextSection) sections.getValue()).getContent());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        ps.setString(3, String.join("\n",
-                                ((ListSection) sections.getValue()).getContent()));
-                }
+                ps.setString(3, JsonParser.write(sections.getValue(), Section.class));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -233,19 +225,10 @@ public class SqlStorage implements Storage {
     }
 
     private void addSection(Resume resume, ResultSet resultSet) throws SQLException {
-        String typeName = resultSet.getString("type");
-        if (typeName != null) {
-            SectionType type = SectionType.valueOf(typeName);
-            switch (type) {
-                case OBJECTIVE:
-                case PERSONAL:
-                    resume.addSection(type, new TextSection(resultSet.getString("value")));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    List<String> content = Arrays.asList(resultSet.getString("value").split("\n"));
-                    resume.addSection(type, new ListSection(content));
-            }
+        String content = resultSet.getString("value");
+        if (content != null) {
+            SectionType type = SectionType.valueOf(resultSet.getString("type"));
+            resume.addSection(type, JsonParser.read(content, Section.class));
         }
     }
 }
