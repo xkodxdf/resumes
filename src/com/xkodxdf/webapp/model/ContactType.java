@@ -23,13 +23,13 @@ public enum ContactType {
     SKYPE("Skype") {
         @Override
         protected String toHtml0(String value) {
-            return getTitle() + ": " + toLink("skype:" + value, value);
+            return toLink("skype:" + value, value);
         }
     },
     EMAIL("Почта") {
         @Override
         protected String toHtml0(String value) {
-            return getTitle() + ": " + toLink("mailto:" + value, value);
+            return toLink("mailto:" + value, value);
         }
     },
     LINKEDIN("LinkedIn") {
@@ -79,7 +79,7 @@ public enum ContactType {
         return toLink(href, title);
     }
 
-    public static String toLink(String href, String title) {
-        return "<a href='" + href + "'>" + title + "</a>";
+    public String toLink(String href, String title) {
+        return "<a href='" + href + "' id='" + this.name() + "'>" + title + "</a>";
     }
 }
