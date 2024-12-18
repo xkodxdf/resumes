@@ -6,13 +6,18 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/style.css">
-    <jsp:useBean id="resume" type="com.xkodxdf.webapp.model.Resume" scope="request"/>
+    <c:if test="${not empty resume}">
+        <jsp:useBean id="resume" type="com.xkodxdf.webapp.model.Resume" scope="request"/>
+    </c:if>
     <title>Резюме ${resume.fullName}</title>
 </head>
 
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
+    <c:if test="${not empty nameErrMsg}">
+        <p style="color: red">${nameErrMsg}</p>
+    </c:if>
     <form method="post" action="resume" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
