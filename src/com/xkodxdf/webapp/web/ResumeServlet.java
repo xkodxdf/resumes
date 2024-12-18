@@ -16,31 +16,33 @@ public class ResumeServlet extends HttpServlet {
 
     private final Storage storage = Config.get().getSqlStorage();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume r;
-        boolean isNew = false;
-        if (uuid == null || uuid.isEmpty()) {
-            r = new Resume(UUID.randomUUID().toString());
-            isNew = true;
-        } else {
-            r = storage.get(uuid);
-        }
-        r.setFullName(fullName);
-        for (ContactType type : ContactType.values()) {
-            String value = request.getParameter(type.name());
-            if (value != null && !value.trim().isEmpty()) {
-                r.addContact(type, value);
+        if (!fullName.trim().isEmpty()) {
+            Resume r;
+            boolean isNew = false;
+            if (uuid == null || uuid.isEmpty()) {
+                r = new Resume(UUID.randomUUID().toString());
+                isNew = true;
             } else {
-                r.getContacts().remove(type);
+                r = storage.get(uuid);
             }
-        }
-        if (isNew) {
-            storage.save(r);
-        } else {
-            storage.update(r);
+            r.setFullName(fullName);
+            for (ContactType type : ContactType.values()) {
+                String value = request.getParameter(type.name());
+                if (value != null && !value.trim().isEmpty()) {
+                    r.addContact(type, value);
+                } else {
+                    r.getContacts().remove(type);
+                }
+            }
+            if (isNew) {
+                storage.save(r);
+            } else {
+                storage.update(r);
+            }
         }
         response.sendRedirect("resume");
     }
