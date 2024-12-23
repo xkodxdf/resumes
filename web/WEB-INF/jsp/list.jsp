@@ -12,7 +12,7 @@
 <jsp:include page="fragments/header.jsp"/>
 <section>
     <a href="resume?action=save">
-        <img id="ADD_ICON" src="img/add.png" width="24" height="24" title="Создать резюме" alt="Создать резюме">
+        <img id="ADD_ICON" src="img/add.png" width="24" height="24" title="Добавить резюме" alt="Добавить резюме">
     </a>
     <table border="1" cellpadding="8" cellspacing="0">
         <tr>
@@ -27,8 +27,8 @@
             <tr>
                 <td><a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a></td>
                 <td><%=ContactType.EMAIL.toHtml(resume.getContact(ContactType.EMAIL))%></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"></a></td>
-                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png" title="Редактировать" alt="Редактировать"></a></td>
+                <td><a href="resume?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" title="Удалить" alt="Удалить"></a></td>
             </tr>
         </c:forEach>
     </table>
