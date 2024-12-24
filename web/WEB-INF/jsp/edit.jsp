@@ -29,7 +29,7 @@
             <dl>
                 <dt>${type.title}</dt>
                 <dd><input type="text" name="${type.name()}" size=30 maxlength="128"
-                           pattern="^[a-zA-Zа-яА-ЯёЁ0-9.@_\(\)\/\-]+$"
+                           pattern="^[a-zA-Zа-яА-ЯёЁ0-9.:@_\(\)\/\-]+$"
                            title="Допустимы буквы русского и английского алфавита, цифры, точки, слеши, знак @, тире, нижнее подчёркивание и скобки"
                            placeholder="${type.title}"
                            value="${empty resume.contacts ? "" : resume.getContact(type)}"></dd>
@@ -47,23 +47,19 @@
                         <c:choose>
                             <c:when test="${type == SectionType.OBJECTIVE}">
                                 <textarea name="${type.name()}" rows="4" cols="64"
-                                          onkeyup="this.value = this.value.replace(/[&*<>]/g, '')">
-                                        ${OBJECTIVE}</textarea>
+                                          onkeyup="this.value = this.value.replace(/[!#&*<>\/]/g, '')">${OBJECTIVE}</textarea>
                             </c:when>
                             <c:when test="${type == SectionType.PERSONAL}">
                                 <textarea name="${type.name()}" rows="4" cols="64"
-                                          onkeyup="this.value = this.value.replace(/[&*<>]/g, '')">
-                                        ${PERSONAL}</textarea>
+                                          onkeyup="this.value = this.value.replace(/[!#&*<>\/]/g, '')">${PERSONAL}</textarea>
                             </c:when>
                             <c:when test="${type == SectionType.ACHIEVEMENT}">
                                 <textarea name="${type.name()}" rows="8" cols="64"
-                                          onkeyup="this.value = this.value.replace(/[&*<>]/g, '')">
-                                        ${ACHIEVEMENT}</textarea>
+                                          onkeyup="this.value = this.value.replace(/[!#&*<>\/]/g, '')">${ACHIEVEMENT}</textarea>
                             </c:when>
                             <c:when test="${type == SectionType.QUALIFICATIONS}">
                                 <textarea name="${type.name()}" rows="8" cols="64"
-                                          onkeyup="this.value = this.value.replace(/[&*<>]/g, '')">
-                                        ${QUALIFICATIONS}</textarea>
+                                          onkeyup="this.value = this.value.replace(/[!#&*<>\/]/g, '')">${QUALIFICATIONS}</textarea>
                             </c:when>
                         </c:choose>
                     </dd>
