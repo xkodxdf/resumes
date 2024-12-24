@@ -21,11 +21,6 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        if (fullName.trim().isEmpty()) {
-            request.setAttribute("nameErrMsg", "Поле ФИО не должно быть пустым или содержать только пробелы");
-            request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
-            return;
-        }
         Resume r;
         boolean isNew = false;
         if (uuid == null || uuid.isEmpty()) {
