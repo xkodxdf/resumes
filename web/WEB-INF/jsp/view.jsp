@@ -17,16 +17,20 @@
     <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
                                                                                       title="Редактировать"
                                                                                       alt="Редактировать"></a></h2>
-    <h4 style="color: dimgrey">Контакты</h4>
     <div>
+        <c:if test="${not empty resume.contacts}">
+            <h4 style="color: dimgrey">Контакты</h4>
+        </c:if>
         <c:forEach var="contactEntry" items="${resume.contacts}">
             <jsp:useBean id="contactEntry"
                          type="java.util.Map.Entry<com.xkodxdf.webapp.model.ContactType, java.lang.String>"/>
             <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     </div>
-    <h4 style="color: dimgrey">Секции</h4>
     <div>
+        <c:if test="${not empty resume.sections}">
+            <h4 style="color: dimgrey">Секции</h4>
+        </c:if>
         <c:forEach var="sectionEntry" items="${resume.sections}">
             <jsp:useBean id="sectionEntry" type="java.util.Map.Entry<com.xkodxdf.webapp.model.SectionType,
             com.xkodxdf.webapp.model.Section>"/>
@@ -35,15 +39,17 @@
             <c:choose>
                 <c:when test="${(sectionType == SectionType.OBJECTIVE) or (sectionType == SectionType.PERSONAL)}">
                     <dl>
-                        <dt><p>${sectionTypeTitle}</p></dt><br>
+                        <dt><p>${sectionTypeTitle}</p></dt>
+                        <br>
                         <dd>
                             <%=((TextSection) sectionEntry.getValue()).getContent()%>
                         </dd>
                     </dl>
                 </c:when>
-                <c:when test="${sectionType.equals(SectionType.ACHIEVEMENT) or sectionType.equals(SectionType.QUALIFICATIONS)}">
+                <c:when test="${(sectionType == SectionType.ACHIEVEMENT) or (sectionType == SectionType.QUALIFICATIONS)}">
                     <dl>
-                        <dt>${sectionTypeTitle}</dt><br>
+                        <dt>${sectionTypeTitle}</dt>
+                        <br>
                         <dd>
                             <ul>
                                 <c:forEach var="listElement"
