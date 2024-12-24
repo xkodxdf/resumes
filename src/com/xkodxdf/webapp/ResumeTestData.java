@@ -114,8 +114,8 @@ public class ResumeTestData {
             put(SectionType.PERSONAL, personal);
             put(SectionType.ACHIEVEMENT, achievements);
             put(SectionType.QUALIFICATIONS, qualification);
-//            put(SectionType.EXPERIENCE, experience);
-//            put(SectionType.EDUCATION, education);
+            put(SectionType.EXPERIENCE, experience);
+            put(SectionType.EDUCATION, education);
         }};
     }
 }
