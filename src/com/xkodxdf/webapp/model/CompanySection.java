@@ -8,6 +8,8 @@ public class CompanySection extends Section {
 
     private static final long serialVersionUID = 1L;
 
+    public static final CompanySection EMPTY = new CompanySection(Company.EMPTY);
+
     private List<Company> content;
 
     public CompanySection() {
