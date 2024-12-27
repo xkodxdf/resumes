@@ -20,6 +20,8 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final Company EMPTY = new Company("", "", Period.EMPTY);
+
     private Link homePage;
     private List<Period> periods;
 
@@ -55,6 +57,10 @@ public class Company implements Serializable {
         return periods;
     }
 
+    public void addPeriod(Period period) {
+        periods.add(period);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,6 +87,8 @@ public class Company implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
+        public static final Period EMPTY = new Period("", "", LocalDate.MIN, LocalDate.MAX);
+
         private String title;
         private String description;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
@@ -89,6 +97,11 @@ public class Company implements Serializable {
         private LocalDate endDate;
 
         public Period() {
+        }
+
+        public Period(String title, String description) {
+            this.title = title;
+            this.description = description;
         }
 
         public Period(String title, String description, int startYear, Month startMonth) {
@@ -122,8 +135,16 @@ public class Company implements Serializable {
             return startDate;
         }
 
+        public void setStartDate(LocalDate startDate) {
+            this.startDate = startDate;
+        }
+
         public LocalDate getEndDate() {
             return endDate;
+        }
+
+        public void setEndDate(LocalDate endDate) {
+            this.endDate = endDate;
         }
 
         @Override
