@@ -4,10 +4,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -15,13 +13,26 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String uuid;
+    public static final Resume EMPTY = new Resume();
+
+    static {
+        EMPTY.addSection(SectionType.OBJECTIVE, new TextSection(""));
+        EMPTY.addSection(SectionType.PERSONAL, new TextSection(""));
+        EMPTY.addSection(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<>()));
+        EMPTY.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>()));
+        EMPTY.addSection(SectionType.EXPERIENCE, new CompanySection(List.of(new Company("", "",
+                new Company.Period("", "", LocalDate.MIN, LocalDate.MAX)))));
+        EMPTY.addSection(SectionType.EDUCATION, new CompanySection(List.of(new Company("", "",
+                new Company.Period("", "", LocalDate.MIN, LocalDate.MAX)))));
+    }
+
+    private final String uuid;
     private String fullName;
-    private Map<ContactType, String> contacts;
-    private Map<SectionType, Section> sections;
+    private final Map<ContactType, String> contacts;
+    private final Map<SectionType, Section> sections;
 
     public Resume() {
-
+        this("", "", new HashMap<>(), new HashMap<>());
     }
 
     public Resume(String fullName) {
