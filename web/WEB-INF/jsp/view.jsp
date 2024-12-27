@@ -1,6 +1,7 @@
 <%@ page import="com.xkodxdf.webapp.model.SectionType" %>
 <%@ page import="com.xkodxdf.webapp.model.TextSection" %>
 <%@ page import="com.xkodxdf.webapp.model.ListSection" %>
+<%@ page import="com.xkodxdf.webapp.model.CompanySection" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -39,7 +40,7 @@
             <c:choose>
                 <c:when test="${(sectionType == SectionType.OBJECTIVE) or (sectionType == SectionType.PERSONAL)}">
                     <dl>
-                        <dt><p>${sectionTypeTitle}</p></dt>
+                        <dt><h3>${sectionTypeTitle}</h3></dt>
                         <br>
                         <dd>
                             <%=((TextSection) sectionEntry.getValue()).getContent()%>
@@ -48,7 +49,7 @@
                 </c:when>
                 <c:when test="${(sectionType == SectionType.ACHIEVEMENT) or (sectionType == SectionType.QUALIFICATIONS)}">
                     <dl>
-                        <dt>${sectionTypeTitle}</dt>
+                        <dt><h3>${sectionTypeTitle}</h3></dt>
                         <br>
                         <dd>
                             <ul>
@@ -59,6 +60,46 @@
                             </ul>
                         </dd>
                     </dl>
+                </c:when>
+                <c:when test="${(sectionType == SectionType.EXPERIENCE) or (sectionType == SectionType.EDUCATION)}">
+                    <h3>${sectionType.title}</h3>
+                    <c:forEach var="company" items="<%=((CompanySection) sectionEntry.getValue()).getContent()%>">
+                        <c:if test="${empty company.homePage.url}">
+                            <h4>${company.homePage.name}</h4>
+                        </c:if>
+                        <c:if test="${not empty company.homePage.url}">
+                            <h4><a href="${company.homePage.url}">${company.homePage.name}</a></h4>
+                        </c:if>
+                        <c:forEach var="period" items="${company.periods}">
+                            <c:if test="${sectionType == SectionType.EXPERIENCE}">
+                                <h4>Должность:</h4>
+                                <p>${period.title}</p>
+                            </c:if>
+                            <c:if test="${sectionType == SectionType.EDUCATION}">
+                                <h4>Направление:</h4>
+                                <p>${period.title}</p>
+                            </c:if>
+                            <c:if test="${sectionType == SectionType.EXPERIENCE}">
+                                <c:if test="${not empty period.description}">
+                                    <h4>Обязанности:</h4>
+                                </c:if>
+                            </c:if>
+                            <c:if test="${sectionType == SectionType.EDUCATION}">
+                                <c:if test="${not empty period.description}">
+                                    <h4>Описание:</h4>
+                                </c:if>
+                            </c:if>
+                            <p>${period.description}</p>
+                            <c:if test="${not empty period.startDate}">
+                                <h4>Период:</h4>
+                                <input type="date" value="${period.startDate}" readonly>
+                            </c:if>
+                            <c:if test="${not empty period.endDate}">
+                                - <input type="date" value="${period.endDate}" readonly>
+                            </c:if>
+                            <hr>
+                        </c:forEach>
+                    </c:forEach>
                 </c:when>
             </c:choose>
             <br/>
