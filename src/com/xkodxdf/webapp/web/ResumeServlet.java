@@ -47,7 +47,7 @@ public class ResumeServlet extends HttpServlet {
             boolean isCompanyNamesEmpty = (companyNames.length <= 2 && companyNames[0].isEmpty());
             if (isCompanyNameEmpty && isCompanyNamesEmpty) {
                 resume.getSections().remove(type);
-            } else if (!isCompanyNameEmpty) {
+            } else if (companyName != null) {
                 switch (type) {
                     case OBJECTIVE:
                     case PERSONAL:
