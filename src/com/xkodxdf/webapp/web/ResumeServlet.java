@@ -142,11 +142,8 @@ public class ResumeServlet extends HttpServlet {
                                 resume.addSection(type, CompanySection.EMPTY);
                             } else {
                                 CompanySection companySection = (CompanySection) resumeSection;
-                                for (Company company : companySection.getContent()) {
-                                    if (company.getPeriods().isEmpty()) {
-                                        company.addPeriod(Company.Period.EMPTY);
-                                    }
-                                }
+                                companySection.getContent()
+                                        .forEach(company -> company.addPeriod(Company.Period.EMPTY));
                                 companySection.getContent().add(Company.EMPTY);
                             }
                             break;
