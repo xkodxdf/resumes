@@ -1,4 +1,4 @@
-package com.xkodxdf.webapp;
+package com.xkodxdf.webapp.not_part_of_the_app;
 
 import java.util.Arrays;
 import java.util.List;

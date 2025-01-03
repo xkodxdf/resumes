@@ -1,4 +1,4 @@
-package com.xkodxdf.webapp;
+package com.xkodxdf.webapp.not_part_of_the_app;
 
 public class MainDeadlock {
     private static final Object LOCK_1 = new Object();

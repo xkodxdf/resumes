@@ -1,4 +1,4 @@
-package com.xkodxdf.webapp;
+package com.xkodxdf.webapp.not_part_of_the_app;
 
 public class MainString {
     public static void main(String[] args) {
