@@ -1,75 +1,134 @@
-section {
-    width: 900px;
-    margin: auto auto auto 0;
+/* Общие стили для всей страницы */
+body {
+    font-family: Arial, sans-serif; /* Используем приятный шрифт */
+    background-color: #f4f4f4; /* Светлый фон для страницы */
+    margin: 0; /* Убираем отступы по умолчанию */
+    padding: 0; /* Убираем внутренние отступы */
 }
 
+/* Заголовок */
 header {
-    background: none repeat scroll 0 0 #A6C9E2;
-    color: #2E6E9E;
-    font-size: 20px;
-    padding: 5px 20px;
-    text-align: center;
+    background-color: #4CAF50; /* Зеленый цвет фона для хедера */
+    color: white; /* Белый цвет текста заголовка */
+    padding: 10px 0; /* Отступы сверху и снизу */
+    text-align: center; /* Центрируем текст */
 }
 
+header a {
+    color: white; /* Цвет ссылки в заголовке */
+    text-decoration: none; /* Убираем подчеркивание у ссылки */
+}
+
+header a:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
+}
+
+/* Футер */
 footer {
-    background: none repeat scroll 0 0 #A6C9E2;
-    color: #2E6E9E;
-    font-size: 20px;
-    padding: 5px 20px;
-    margin: 20px 0;
-    text-align: center;
+    background-color: #4CAF50; /* Зеленый цвет фона для футера */
+    color: white; /* Белый цвет текста футера */
+    padding: 10px 0; /* Отступы сверху и снизу */
+    text-align: center; /* Центрируем текст */
 }
 
-dl {
-    background: none repeat scroll 0 0 #FAFAFA;
-    margin: 8px 0;
-    padding: 0;
+footer a {
+    color: white; /* Цвет ссылки в футере */
+    text-decoration: none; /* Убираем подчеркивание у ссылки */
 }
 
-dt {
-    display: inline-block;
-    width: 170px;
+footer a:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
 }
 
-dd {
-    display: inline-block;
-    margin-left: 8px;
-    vertical-align: top;
+/* Стили для секции */
+section {
+    margin: 20px; /* Отступы от краев */
+    padding: 20px; /* Внутренние отступы */
+    background-color: white; /* Белый фон для секции */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Легкая тень */
 }
 
-h2, h3 {
-    margin: 15px 0 5px;
+/* Стили для таблицы */
+table {
+    width: 100%; /* Ширина таблицы 100% */
+    border-collapse: collapse; /* Убираем двойные границы */
 }
 
-li {
-    margin: 15px 0;
+th, td {
+    border: 1px solid #ddd; /* Светло-серая граница ячеек */
+    padding: 12px; /* Внутренние отступы в ячейках */
 }
 
-img[id="ADD_ICON"] {
-    margin: auto auto 8px auto;
+th {
+    background-color: #f2f2f2; /* Светло-серый фон для заголовков */
+    text-align: left; /* Выравнивание текста в заголовках */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Чередование цвета строк */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Цвет при наведении на строку */
+}
+
+/* Стили для ссылок */
+a {
+    color: #4CAF50; /* Цвет ссылок */
+    padding-left: 20px !important;
+    text-decoration: none; /* Убираем подчеркивание */
+}
+
+a:hover {
+    text-decoration: underline; /* Подчеркивание при наведении */
+}
+
+.resume-section {
+    margin-bottom: 20px; /* Отступ между секциями резюме */
+    padding: 15px; /* Внутренние отступы */
+    background-color: #f9f9f9; /* Светлый фон для секций */
+    border: 1px solid #ddd; /* Светло-серая граница */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+.resume-section h4 {
+    color: dimgrey; /* Цвет для заголовков секций */
+}
+
+/* Форматирование для заголовков и списков */
+.resume-section h3 {
+    color: #4CAF50; /* Цвет заголовков раздела */
+}
+
+/* Иконки действий (редактирования/удаления) */
+img {
+    vertical-align: middle; /* Центрируем изображения по вертикали */
+    margin: 0 5px; /* Отступы между изображениями */
+}
+
+/* Стили для иконки добавления резюме */
+#ADD_ICON {
+    margin-bottom: 10px; /* Отступ снизу */
 }
 
 a[id="SKYPE"] {
-    padding-left: 20px !important;
     background: url(../img/skype.png) no-repeat center left;
 }
 
 a[id="EMAIL"] {
-    padding-left: 20px !important;
     background: url(../img/email.png) no-repeat center left;
 }
 
 a[id="STACKOVERFLOW"] {
-    padding-left: 20px !important;
     background: url(../img/so.png) no-repeat center left;
 }
 
 a[id="LINKEDIN"] {
-    padding-left: 20px !important;
     background: url(../img/lin.png) no-repeat center left;
 }
 
 a[id="GITHUB"] {
-    padding-left: 20px !important;
     background: url(../img/gh.png) no-repeat center left;
 }

@@ -18,7 +18,7 @@
     <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit"><img src="img/pencil.png"
                                                                                       title="Редактировать"
                                                                                       alt="Редактировать"></a></h2>
-    <div>
+    <div id="view_contacts" class="resume-section">
         <c:if test="${not empty resume.contacts}">
             <h4 style="color: dimgrey">Контакты</h4>
         </c:if>
@@ -28,9 +28,9 @@
             <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     </div>
-    <div>
+    <div id="view_sections" class="resume-section">
         <c:if test="${not empty resume.sections}">
-            <h4 style="color: dimgrey">Секции</h4>
+            <h4 style="color: dimgrey">О себе</h4>
         </c:if>
         <c:forEach var="sectionEntry" items="${resume.sections}">
             <jsp:useBean id="sectionEntry" type="java.util.Map.Entry<com.xkodxdf.webapp.model.SectionType,
