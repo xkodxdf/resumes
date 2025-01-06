@@ -60,34 +60,7 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        List<Company> companies = new ArrayList<>();
-                        String[] urls = request.getParameterValues(type.name() + "url");
-                        for (int i = 0; i < companyNames.length; i++) {
-                            String name = companyNames[i];
-                            if ((name != null) && !(name.trim().isEmpty())) {
-                                String commonMark = type.name() + i;
-                                List<Company.Period> periods = new ArrayList<>();
-                                String url = urls[i];
-                                String[] startDates = request.getParameterValues(commonMark + "start_date");
-                                String[] endDates = request.getParameterValues(commonMark + "end_date");
-                                String[] titles = request.getParameterValues(commonMark + "title");
-                                String[] descriptions = request.getParameterValues(commonMark + "description");
-                                for (int k = 0; k < titles.length; k++) {
-                                    if (titles[k] != null && !titles[k].trim().isEmpty()) {
-                                        Company.Period period = new Company.Period(titles[k], descriptions[k]);
-                                        if (!startDates[k].isEmpty()) {
-                                            period.setStartDate(LocalDate.parse(startDates[k]));
-                                        }
-                                        if (!(startDates[k].isEmpty()) && !(endDates[k].isEmpty())) {
-                                            period.setEndDate(LocalDate.parse(endDates[k]));
-                                        }
-                                        periods.add(period);
-                                    }
-                                }
-                                companies.add(new Company(name, url, periods));
-                            }
-                        }
-                        resume.addSection(type, new CompanySection(companies));
+                        handleCompanySections(resume, type, companyNames, request);
                 }
             }
         }
@@ -120,42 +93,78 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "edit":
-                resume = storage.get(uuid);
-                for (SectionType type : SectionType.values()) {
-                    Section resumeSection = resume.getSection(type);
-                    switch (type) {
-                        case OBJECTIVE:
-                        case PERSONAL:
-                            if (resumeSection == null) {
-                                resume.addSection(type, TextSection.EMPTY);
-                            }
-                            break;
-                        case ACHIEVEMENT:
-                        case QUALIFICATIONS:
-                            if (resumeSection == null) {
-                                resume.addSection(type, ListSection.EMPTY);
-                            }
-                            break;
-                        case EXPERIENCE:
-                        case EDUCATION:
-                            if (resumeSection == null) {
-                                resume.addSection(type, CompanySection.EMPTY);
-                            } else {
-                                CompanySection companySection = (CompanySection) resumeSection;
-                                companySection.getContent()
-                                        .forEach(company -> company.addPeriod(Company.Period.EMPTY));
-                                companySection.getContent().add(Company.EMPTY);
-                            }
-                            break;
-                    }
-                }
+                resume = prepareResumeForEdit(storage.get(uuid));
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }
         request.setAttribute("resume", resume);
-        request.getRequestDispatcher(
-                ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
-        ).forward(request, response);
+        request.getRequestDispatcher(("view".equals(action) ?
+                        "/WEB-INF/jsp/view.jsp"
+                        : "/WEB-INF/jsp/edit.jsp"))
+                .forward(request, response);
+    }
+
+    private void handleCompanySections(Resume resume, SectionType type, String[] companyNames, HttpServletRequest request) {
+        List<Company> companies = new ArrayList<>();
+        String[] urls = request.getParameterValues(type.name() + "url");
+        for (int i = 0; i < companyNames.length; i++) {
+            String name = companyNames[i];
+            if ((name != null) && !(name.trim().isEmpty())) {
+                String commonMark = type.name() + i;
+                List<Company.Period> periods = new ArrayList<>();
+                String url = urls[i];
+                String[] startDates = request.getParameterValues(commonMark + "start_date");
+                String[] endDates = request.getParameterValues(commonMark + "end_date");
+                String[] titles = request.getParameterValues(commonMark + "title");
+                String[] descriptions = request.getParameterValues(commonMark + "description");
+                for (int k = 0; k < titles.length; k++) {
+                    if (titles[k] != null && !titles[k].trim().isEmpty()) {
+                        Company.Period period = new Company.Period(titles[k], descriptions[k]);
+                        if (!startDates[k].isEmpty()) {
+                            period.setStartDate(LocalDate.parse(startDates[k]));
+                        }
+                        if (!(startDates[k].isEmpty()) && !(endDates[k].isEmpty())) {
+                            period.setEndDate(LocalDate.parse(endDates[k]));
+                        }
+                        periods.add(period);
+                    }
+                }
+                companies.add(new Company(name, url, periods));
+            }
+        }
+        resume.addSection(type, new CompanySection(companies));
+    }
+
+    private Resume prepareResumeForEdit(Resume resume) {
+        for (SectionType type : SectionType.values()) {
+            Section resumeSection = resume.getSection(type);
+            switch (type) {
+                case OBJECTIVE:
+                case PERSONAL:
+                    if (resumeSection == null) {
+                        resume.addSection(type, TextSection.EMPTY);
+                    }
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    if (resumeSection == null) {
+                        resume.addSection(type, ListSection.EMPTY);
+                    }
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    if (resumeSection == null) {
+                        resume.addSection(type, CompanySection.EMPTY);
+                    } else {
+                        CompanySection companySection = (CompanySection) resumeSection;
+                        companySection.getContent()
+                                .forEach(company -> company.addPeriod(Company.Period.EMPTY));
+                        companySection.getContent().add(Company.EMPTY);
+                    }
+                    break;
+            }
+        }
+        return resume;
     }
 }
